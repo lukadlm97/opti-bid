@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OptiBid.Micorservices.Accounts.Persistence\OptiBid.Microservices.Accounts.Persistence.csproj" />
+    <ProjectReference Include="..\OptiBid.Microservices.Accounts.Persistence\OptiBid.Microservices.Accounts.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

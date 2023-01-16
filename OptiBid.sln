@@ -9,19 +9,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9165A68B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accounts", "Accounts", "{44490879-8CF8-4BC1-BF12-AB84095B9341}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Accounts.Persistence", "OptiBid.Micorservices.Accounts.Persistence\OptiBid.Microservices.Accounts.Persistence.csproj", "{266F7AAF-35AB-4737-86D2-F42AC37562E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Accounts.Persistence", "OptiBid.Microservices.Accounts.Persistence\OptiBid.Microservices.Accounts.Persistence.csproj", "{266F7AAF-35AB-4737-86D2-F42AC37562E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Accounts.Domain", "OptiBid.Micorservices.Accounts.Domain\OptiBid.Microservices.Accounts.Domain.csproj", "{401D0E51-331F-4D9F-9850-199851B19966}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Accounts.Domain", "OptiBid.Microservices.Accounts.Domain\OptiBid.Microservices.Accounts.Domain.csproj", "{401D0E51-331F-4D9F-9850-199851B19966}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C21792F4-C371-4E4F-AA3C-937363C4EF33}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{24648D53-08E6-4017-A5AB-81F45C53DE74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Accounts.Data", "OptiBid.Micorservices.Accounts.Data\OptiBid.Microservices.Accounts.Data.csproj", "{ACF1F451-DA86-423F-B0AA-A755BEE54253}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Accounts.Data", "OptiBid.Microservices.Accounts.Data\OptiBid.Microservices.Accounts.Data.csproj", "{ACF1F451-DA86-423F-B0AA-A755BEE54253}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Accounts.Services", "OptiBid.Micorservices.Accounts.Services\OptiBid.Microservices.Accounts.Services.csproj", "{89FB1267-8019-4B1F-929D-0A86606A41EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Accounts.Services", "OptiBid.Microservices.Accounts.Services\OptiBid.Microservices.Accounts.Services.csproj", "{89FB1267-8019-4B1F-929D-0A86606A41EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Micorservices.Accounts.Messaging.Send", "OptiBid.Micorservices.Accounts.Messaging.Send\OptiBid.Micorservices.Accounts.Messaging.Send.csproj", "{AC51BB06-488B-4253-A04A-A8CF65945089}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Accounts.Messaging.Send", "OptiBid.Microservices.Accounts.Messaging.Send\OptiBid.Microservices.Accounts.Messaging.Send.csproj", "{AC51BB06-488B-4253-A04A-A8CF65945089}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Accounts.Web", "OptiBid.Microservices.Accounts.Web\OptiBid.Microservices.Accounts.Web.csproj", "{55C69C61-03BA-4235-87FC-CF00A714F453}"
 EndProject
