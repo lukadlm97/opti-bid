@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OptiBid.Microservices.Accounts.Persistence;
 
@@ -11,9 +12,11 @@ using OptiBid.Microservices.Accounts.Persistence;
 namespace OptiBid.Microservices.Accounts.Persistence.Migrations
 {
     [DbContext(typeof(AccountsContext))]
-    partial class AccountsContextModelSnapshot : ModelSnapshot
+    [Migration("20230117182041_remove_country_table_from_context_2023-17-01-19-21")]
+    partial class removecountrytablefromcontext202317011921
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,32 +69,6 @@ namespace OptiBid.Microservices.Accounts.Persistence.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("ContactTypes");
-                });
-
-            modelBuilder.Entity("OptiBid.Microservices.Accounts.Domain.Entities.Country", b =>
-                {
-                    b.Property<int>("ID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Iso")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Iso3")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NiceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("OptiBid.Microservices.Accounts.Domain.Entities.Profession", b =>
@@ -175,8 +152,6 @@ namespace OptiBid.Microservices.Accounts.Persistence.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CountryID");
-
                     b.HasIndex("UserRoleID");
 
                     b.ToTable("Users");
@@ -234,15 +209,9 @@ namespace OptiBid.Microservices.Accounts.Persistence.Migrations
 
             modelBuilder.Entity("OptiBid.Microservices.Accounts.Domain.Entities.User", b =>
                 {
-                    b.HasOne("OptiBid.Microservices.Accounts.Domain.Entities.Country", "Country")
-                        .WithMany("Users")
-                        .HasForeignKey("CountryID");
-
                     b.HasOne("OptiBid.Microservices.Accounts.Domain.Entities.UserRole", "UserRole")
                         .WithMany("Users")
                         .HasForeignKey("UserRoleID");
-
-                    b.Navigation("Country");
 
                     b.Navigation("UserRole");
                 });
@@ -250,11 +219,6 @@ namespace OptiBid.Microservices.Accounts.Persistence.Migrations
             modelBuilder.Entity("OptiBid.Microservices.Accounts.Domain.Entities.ContactType", b =>
                 {
                     b.Navigation("Contacts");
-                });
-
-            modelBuilder.Entity("OptiBid.Microservices.Accounts.Domain.Entities.Country", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("OptiBid.Microservices.Accounts.Domain.Entities.Profession", b =>

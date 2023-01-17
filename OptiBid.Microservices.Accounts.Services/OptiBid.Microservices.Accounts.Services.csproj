@@ -6,4 +6,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Command\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="11.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OptiBid.Microservices.Accounts.Data\OptiBid.Microservices.Accounts.Data.csproj" />
+    <ProjectReference Include="..\OptiBid.Microservices.Accounts.Domain\OptiBid.Microservices.Accounts.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

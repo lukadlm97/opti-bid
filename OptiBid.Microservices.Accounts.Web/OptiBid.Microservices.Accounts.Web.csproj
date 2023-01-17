@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
       <PrivateAssets>all</PrivateAssets>
@@ -20,8 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OptiBid.Micorservices.Accounts.Persistence\OptiBid.Microservices.Accounts.Persistence.csproj" />
+    <ProjectReference Include="..\OptiBid.Microservices.Accounts.Data\OptiBid.Microservices.Accounts.Data.csproj" />
+    <ProjectReference Include="..\OptiBid.Microservices.Accounts.Domain\OptiBid.Microservices.Accounts.Domain.csproj" />
     <ProjectReference Include="..\OptiBid.Microservices.Accounts.Persistence\OptiBid.Microservices.Accounts.Persistence.csproj" />
+    <ProjectReference Include="..\OptiBid.Microservices.Accounts.Services\OptiBid.Microservices.Accounts.Services.csproj" />
   </ItemGroup>
 
 </Project>

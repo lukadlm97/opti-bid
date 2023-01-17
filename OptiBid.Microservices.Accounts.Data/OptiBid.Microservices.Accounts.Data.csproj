@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OptiBid.Microservices.Accounts.Persistence\OptiBid.Microservices.Accounts.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>
