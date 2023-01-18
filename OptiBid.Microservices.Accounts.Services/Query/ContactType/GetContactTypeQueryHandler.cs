@@ -7,21 +7,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using OptiBid.Microservices.Accounts.Services.UnitOfWork;
 
 namespace OptiBid.Microservices.Accounts.Services.Query.ContactType
 {
-    public class GetContactTypeQueryHandler : IRequestHandler<GetContactTypeCommand, List<Domain.Entities.ContactType>>
+    public class GetContactTypeQueryHandler : IRequestHandler<GetContactTypeCommand, IEnumerable<Domain.DTOs.ContactType>>
     {
-        private readonly IRepository<Domain.Entities.ContactType> _contactTypeRepository;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GetContactTypeQueryHandler(IRepository<Domain.Entities.ContactType> contactTypeRepository)
+        public GetContactTypeQueryHandler(IUnitOfWork unitOfWork,IMapper mapper)
         {
-            _contactTypeRepository = contactTypeRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<List<Domain.Entities.ContactType>> Handle(GetContactTypeCommand request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Domain.DTOs.ContactType>> Handle(GetContactTypeCommand request, CancellationToken cancellationToken)
         {
-            return _contactTypeRepository.GetAll().ToList();
+            return _mapper.Map<IEnumerable<Domain.Entities.ContactType>,IEnumerable<Domain.DTOs.ContactType>>(_unitOfWork._contactTypeRepository.GetAll().AsEnumerable());
         }
     }
 }

@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using MediatR;
-using OptiBid.Microservices.Accounts.Data.Repository;
+using OptiBid.Microservices.Accounts.Services.UnitOfWork;
 
 namespace OptiBid.Microservices.Accounts.Services.Query.Profession
 {
-    public class GetProfessionsQueryHandler:IRequestHandler<GetProfessionsCommand,List<Domain.Entities.Profession>>
+    public class GetProfessionsQueryHandler:IRequestHandler<GetProfessionsCommand,IEnumerable<Domain.DTOs.Profession>>
     {
-        private readonly IRepository<Domain.Entities.Profession> professionRepository;
 
-        public GetProfessionsQueryHandler(IRepository<Domain.Entities.Profession> professionRepository)
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+
+        public GetProfessionsQueryHandler(IUnitOfWork unitOfWork,IMapper mapper)
         {
-            this.professionRepository = professionRepository;
+            this._unitOfWork = unitOfWork;
+            this._mapper = mapper;
         }
-        public async Task<List<Domain.Entities.Profession>> Handle(GetProfessionsCommand request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Domain.DTOs.Profession>> Handle(GetProfessionsCommand request, CancellationToken cancellationToken)
         {
-            return this.professionRepository.GetAll().ToList();
+            return _mapper.Map<IEnumerable<Domain.Entities.Profession>,IEnumerable<Domain.DTOs.Profession>>(this._unitOfWork._professionRepository.GetAll().AsEnumerable());
         }
     }
 }

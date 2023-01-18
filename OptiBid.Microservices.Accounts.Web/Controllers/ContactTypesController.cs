@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OptiBid.Microservices.Accounts.Domain.Entities;
 using OptiBid.Microservices.Accounts.Services.Query.ContactType;
@@ -9,11 +10,11 @@ namespace OptiBid.Microservices.Accounts.Web.Controllers
     [Produces("application/json")]
     [Route("v1/[controller]")]
     [ApiController]
-    public class ContactTypesControllers : ControllerBase
+    public class ContactTypesController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public ContactTypesControllers(IMediator mediator)
+        public ContactTypesController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -27,11 +28,11 @@ namespace OptiBid.Microservices.Accounts.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
-        public async Task<ActionResult<List<ContactType>>> Customers()
+        public async Task<IActionResult> Customers()
         {
             try
             {
-                return await _mediator.Send(new GetContactTypeCommand());
+                return Ok(await _mediator.Send(new GetContactTypeCommand()));
             }
             catch (Exception ex)
             {

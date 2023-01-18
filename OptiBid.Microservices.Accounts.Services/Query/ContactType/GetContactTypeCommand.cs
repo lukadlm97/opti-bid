@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OptiBid.Microservices.Accounts.Services.Query.ContactType
 {
-    public class GetContactTypeCommand : IRequest<List<Domain.Entities.ContactType>>
+    public class GetContactTypeCommand : IRequest<IEnumerable<Domain.DTOs.ContactType>>
     {
     }
 }

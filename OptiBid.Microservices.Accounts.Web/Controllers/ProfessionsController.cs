@@ -26,11 +26,11 @@ namespace OptiBid.Microservices.Accounts.Web.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
-        public async Task<ActionResult<List<Profession>>> Professions()
+        public async Task<IActionResult> Professions()
         {
             try
             {
-                return await _mediator.Send(new GetProfessionsCommand());
+                return Ok(await _mediator.Send(new GetProfessionsCommand()));
             }
             catch (Exception ex)
             {

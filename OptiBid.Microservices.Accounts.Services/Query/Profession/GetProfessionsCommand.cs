@@ -7,7 +7,7 @@ using MediatR;
 
 namespace OptiBid.Microservices.Accounts.Services.Query.Profession
 {
-    public class GetProfessionsCommand: IRequest<List<Domain.Entities.Profession>>
+    public class GetProfessionsCommand: IRequest<IEnumerable<Domain.DTOs.Profession>>
     {
     }
 }

@@ -5,17 +5,26 @@ using System.Reflection;
 using MediatR;
 using OptiBid.Microservices.Accounts.Data.Repository;
 using Microsoft.OpenApi.Models;
-using OptiBid.Microservices.Accounts.Domain.Entities;
 using OptiBid.Microservices.Accounts.Services.Query.Accounts;
 using OptiBid.Microservices.Accounts.Services.Query.ContactType;
 using OptiBid.Microservices.Accounts.Services.Query.Country;
 using OptiBid.Microservices.Accounts.Services.Query.Profession;
+using Microsoft.Extensions.DependencyInjection;
+using OptiBid.Microservices.Accounts.Services;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+JsonSerializerOptions configOptions = new()
+{
+    ReferenceHandler = ReferenceHandler.Preserve,
+    WriteIndented = true
+};
+builder.Services.AddControllers()
+    .AddJsonOptions(opt => opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen(c =>
@@ -40,12 +49,7 @@ builder.Services.AddDbContext<AccountsContext>(options =>
             .UseSqlServer(builder.Configuration.GetSection("DbSettings")["ConnectionString"]));
 
 
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<IRequestHandler<GetAccountsCommand, List<User>>, GetAccountsQueryHandler>();
-builder.Services.AddScoped<IRequestHandler<GetCountriesCommand, List<Country>>, GetCountriesQueryHandler>();
-builder.Services.AddScoped<IRequestHandler<GetContactTypeCommand, List<ContactType>>, GetContactTypeQueryHandler>();
-builder.Services.AddScoped<IRequestHandler<GetProfessionsCommand, List<Profession>>, GetProfessionsQueryHandler>();
+builder.Services.AddApplication();
 
 var app = builder.Build();
 

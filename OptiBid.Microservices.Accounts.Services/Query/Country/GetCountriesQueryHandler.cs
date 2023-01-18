@@ -1,19 +1,22 @@
-﻿using MediatR;
-using OptiBid.Microservices.Accounts.Data.Repository;
+﻿using AutoMapper;
+using MediatR;
+using OptiBid.Microservices.Accounts.Services.UnitOfWork;
 
 namespace OptiBid.Microservices.Accounts.Services.Query.Country
 {
-    public class GetCountriesQueryHandler : IRequestHandler<GetCountriesCommand, List<Domain.Entities.Country>>
+    public class GetCountriesQueryHandler : IRequestHandler<GetCountriesCommand, IEnumerable<Domain.DTOs.Country>>
     {
-        private readonly IRepository<Domain.Entities.Country> _countryRepository;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GetCountriesQueryHandler(IRepository<Domain.Entities.Country> countryRepository)
+        public GetCountriesQueryHandler(IUnitOfWork unitOfWork,IMapper mapper)
         {
-            _countryRepository = countryRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
-        public async Task<List<Domain.Entities.Country>> Handle(GetCountriesCommand request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Domain.DTOs.Country>> Handle(GetCountriesCommand request, CancellationToken cancellationToken)
         {
-            return _countryRepository.GetAll().ToList();
+            return _mapper.Map< IEnumerable < Domain.Entities.Country >,IEnumerable <Domain.DTOs.Country>>(_unitOfWork._countryRepository.GetAll().AsEnumerable());
         }
     }
 }

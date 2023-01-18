@@ -1,22 +1,26 @@
-﻿using MediatR;
-using OptiBid.Microservices.Accounts.Data.Repository;
+﻿using AutoMapper;
+using MediatR;
 using OptiBid.Microservices.Accounts.Domain.Entities;
+using OptiBid.Microservices.Accounts.Services.Command.Accounts;
+using OptiBid.Microservices.Accounts.Services.UnitOfWork;
 
 namespace OptiBid.Microservices.Accounts.Services.Query.Accounts
 {
 
-    public class GetAccountsQueryHandler : IRequestHandler<GetAccountsCommand, List<User>>
+    public class GetAccountsQueryHandler : IRequestHandler<GetAccountsCommand, IEnumerable<User>>
     {
-        private readonly IRepository<User> _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public GetAccountsQueryHandler(IRepository<User> userRepository)
+        public GetAccountsQueryHandler(IUnitOfWork unitOfWork,IMapper mapper)
         {
-            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<List<User>> Handle(GetAccountsCommand request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<User>> Handle(GetAccountsCommand request, CancellationToken cancellationToken)
         {
-            return _userRepository.GetAll().ToList();
+            return  _unitOfWork._usersRepository.GetAll();
         }
     }
 }
