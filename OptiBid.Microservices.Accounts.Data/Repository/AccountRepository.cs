@@ -37,12 +37,21 @@ namespace OptiBid.Microservices.Accounts.Data.Repository
 
         public async Task<User?> GetById(int id,CancellationToken cancellationToken=default)
         {
-            return await this.accountsContext.Users.Include(x=>x.UserRole).Include(x=>x.Country).Include(x=>x.Contacts).Include(x=>x.Skills).FirstOrDefaultAsync(x => x.ID == id, cancellationToken);
+            return await this.accountsContext.Users.Include(x=>x.UserRole)
+                .Include(x=>x.Country)
+                .Include(x=>x.Contacts)
+                .Include(x=>x.Skills)
+                .FirstOrDefaultAsync(x => x.ID == id, cancellationToken);
         }
 
         public IEnumerable<User> GetAll()
         {
-            return  this.accountsContext.Users.AsEnumerable();
+            return  this.accountsContext.Users.Include(x=>x.UserRole).AsEnumerable();
+        }
+
+        public async Task<User?> GetByUsername(string username, CancellationToken cancellationToken = default)
+        {
+            return await this.accountsContext.Users.FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
         }
     }
 }

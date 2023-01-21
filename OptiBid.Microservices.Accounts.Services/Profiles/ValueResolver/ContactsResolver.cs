@@ -34,6 +34,7 @@ namespace OptiBid.Microservices.Accounts.Services.Profiles.ValueResolver
                     ContactType = seContactType,
                     ContactTypeID = seContactType?.ID,
                     Content = sourceContact.Content,
+                    ID = sourceContact.ContactId
                 };
                 contacts.Add(newContact);
             }

@@ -31,7 +31,8 @@ namespace OptiBid.Microservices.Accounts.Services.Profiles.ValueResolver
                 var newSkill = new Skill()
                 {
                     Profession = selectedProfession,
-                    ProfessionID = selectedProfession?.ID
+                    ProfessionID = selectedProfession?.ID,
+                    ID = sourceSkill.SkillId
                 };
                 skillList.Add(newSkill);
             }

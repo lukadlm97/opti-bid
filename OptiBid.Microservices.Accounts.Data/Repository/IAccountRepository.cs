@@ -14,5 +14,6 @@ namespace OptiBid.Microservices.Accounts.Data.Repository
         void DeleteUser(User user);
         Task<User?> GetById(int id, CancellationToken cancellationToken = default);
         IEnumerable<User> GetAll();
+        Task<User?> GetByUsername(string username,CancellationToken cancellationToken=default);
     }
 }
