@@ -2,6 +2,8 @@
 using MediatR;
 using OptiBid.Microservices.Accounts.Services.UnitOfWork;
 using OptiBid.Microservices.Accounts.Domain.Entities;
+using OptiBid.Microservices.Accounts.Messaging.Send.Models;
+using OptiBid.Microservices.Accounts.Messaging.Send.Sender;
 
 namespace OptiBid.Microservices.Accounts.Services.Command.Accounts
 {
@@ -9,11 +11,13 @@ namespace OptiBid.Microservices.Accounts.Services.Command.Accounts
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IAccountSender _accountSender;
 
-        public UpdateCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public UpdateCommandHandler(IUnitOfWork unitOfWork, IMapper mapper,IAccountSender accountSender)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _accountSender = accountSender;
         }
         public async Task<Domain.DTOs.User> Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
         {
@@ -30,7 +34,13 @@ namespace OptiBid.Microservices.Accounts.Services.Command.Accounts
 
                 _unitOfWork._usersRepository.UpdateUser(existingUser);
                 await _unitOfWork.Commit(cancellationToken);
-
+                _accountSender.Send(new AccountMessage()
+                {
+                    MessageType = MessageType.Update,
+                    Name = request.User.FirstName + " " + request.User.LastName,
+                    RoleName = request.User.UserRole.Name,
+                    UserName = request.User.Username
+                });
                 return _mapper.Map<Domain.DTOs.User>(existingUser);
             }
 

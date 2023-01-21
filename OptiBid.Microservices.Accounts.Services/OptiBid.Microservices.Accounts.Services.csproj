@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OptiBid.Microservices.Accounts.Data\OptiBid.Microservices.Accounts.Data.csproj" />
     <ProjectReference Include="..\OptiBid.Microservices.Accounts.Domain\OptiBid.Microservices.Accounts.Domain.csproj" />
+    <ProjectReference Include="..\OptiBid.Microservices.Accounts.Messaging.Send\OptiBid.Microservices.Accounts.Messaging.Send.csproj" />
   </ItemGroup>
 
 </Project>

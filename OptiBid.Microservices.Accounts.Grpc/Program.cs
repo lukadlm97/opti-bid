@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using OptiBid.Microservices.Accounts.Domain.Configuration;
 using OptiBid.Microservices.Accounts.Grpc.Services;
+using OptiBid.Microservices.Accounts.Messaging.Send;
+using OptiBid.Microservices.Accounts.Messaging.Send.Configurations;
 using OptiBid.Microservices.Accounts.Persistence;
 using OptiBid.Microservices.Accounts.Services;
 
@@ -19,12 +21,14 @@ builder.Services.AddSwaggerGen(c =>
         new OpenApiInfo { Title = "gRPC transcoding", Version = "v1" });
 });
 builder.Services.Configure<DbSettings>(builder.Configuration.GetSection("DbSettings"));
+builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMq"));
 builder.Services.AddDbContext<AccountsContext>(options =>
     options
         .UseSqlServer(builder.Configuration.GetSection("DbSettings")["ConnectionString"]));
 
 
 builder.Services.AddApplication();
+builder.Services.AddMessageProducing();
 
 var app = builder.Build(); 
 
