@@ -77,11 +77,11 @@ namespace OptiBid.Microservices.Accounts.Web.Controllers
         {
             try
             {
-                var (isNull,user) = await _mediator.Send(new GetAccountByIdCommand()
+                var (notNull,user) = await _mediator.Send(new GetAccountByIdCommand()
                 {
                     Id = id
                 });
-                return isNull ? NotFound() : Ok(user);
+                return notNull ? Ok(user): NotFound() ;
             }
             catch (Exception ex)
             {

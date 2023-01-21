@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+option csharp_namespace = "OptiBid.Microservices.Accounts.Grpc.UserServiceDefinition";
+
+import "google/protobuf/wrappers.proto";
+
+
+package user;
+
+
+// The greeting service definition.
+service User {
+  // Sends a greeting
+  rpc Get (UsersPagingRequest) returns (UsersReplay);
+  rpc GetById(UsersRequest) returns (UserDetailsReplay);
+  rpc Register(UserRegisterRequest)returns(RegisterReplay);
+  rpc SignIn(UserRequest)returns(UserDetailsReplay);
+  rpc UpdateProfile(UpdateRequest)returns(RegisterReplay);
+
+}
+
+// The request message containing the user's name.
+message UsersPagingRequest {
+  int32 page = 1;
+  int32 size = 2;
+}
+
+message UsersRequest{
+    int32 id=1;
+}
+
+message UsersReplay{
+     repeated SingleUser users=1;
+}
+message UserDetailsReplay{
+    SingleUserDetails user=1;
+    OperationCompletionStatus status=2;
+}
+
+// The response message containing the greetings.
+message SingleUser {
+    int32 id =1;
+    string name=2;
+    string username=3;
+    string role=4;
+}
+
+message SingleContact{
+     int32 id=1;
+     google.protobuf.Int32Value contactTypeId=2;
+     string content=3;
+     bool isActive=4;
+}
+
+message SingleSkill{
+      int32 id=1;
+      google.protobuf.Int32Value professionId=2;
+      bool isActive=3;
+}
+
+
+message SingleUserDetails{
+     int32 id =1;
+     string name=2;
+     string username=3;
+     int32 userRoleID=4;
+     int32 countryId=5;
+     repeated SingleSkill Skills=6;
+     repeated SingleContact Contacts=7;
+}
+
+enum OperationCompletionStatus{
+	SUCCESS=0;
+	BAD_REQUEST=1;
+	NOT_FOUND=2;
+}
+
+message UserRequest{
+    string username=1;
+    string password=2;
+}
+
+message RegisterReplay{
+    OperationCompletionStatus status=1;
+    SingleUser user=2;
+}
+
+message UpdateRequest{
+    int32 userId=1;
+    UserRegisterRequest user=2;
+}
+
+message UserRegisterRequest{
+      string Email=1;
+      string Password=2;
+      string FirstName=3;
+      string LastName=4;
+      int32 CountryId=5;
+      repeated ContactRequest Contacts=6;
+      repeated  SkillRequest Skills=7;
+}
+
+message ContactRequest{
+     int32 ContactId=1;
+      int32 ContactTypeId=2;
+     string Content=3;
+     bool IsActive=4;
+}
+
+message SkillRequest{
+     int32 ProfessionId=1;
+     int32 SkillId=2;
+     bool IsActive=3;
+}

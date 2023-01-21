@@ -1,0 +1,64 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "OptiBid.Microservices.Accounts.Grpc.DashboardServiceDefinition";
+
+package dashboard;
+
+
+// The greeting service definition.
+service Dashboard {
+  // Sends a greeting
+  rpc GetAllCountries (EmptyRequest) returns (CountryReply);
+  rpc GetAllContactTypes(EmptyRequest) returns (ContactTypeReply);
+  rpc GetAllProfessions(EmptyRequest) returns (ProfessionReply);
+  rpc GetAllUserRoles(EmptyRequest) returns (UserRoleReply);
+}
+
+// The request message containing the user's name.
+message EmptyRequest {
+}
+
+message CountryReply{
+	 repeated SingleCountry countries=1;
+}
+
+// The response message containing the greetings.
+message SingleCountry {
+  int32 id=1;
+  string name = 2;
+}
+
+message ContactTypeReply{
+	 repeated SingleContactType contactTypes=1;
+}
+
+// The response message containing the greetings.
+message SingleContactType {
+  int32 id=1;
+  string name = 2;
+}
+
+message ProfessionReply{
+	 repeated SingleProfession professions=1;
+}
+
+// The response message containing the greetings.
+message SingleProfession {
+  int32 id=1;
+  string name = 2;
+}
+
+message UserRoleReply{
+	 repeated SingleUserRole userRoles=1;
+}
+
+// The response message containing the greetings.
+message SingleUserRole {
+  int32 id=1;
+  string name = 2;
+}
+
+
+
+
+

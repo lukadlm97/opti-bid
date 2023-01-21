@@ -19,8 +19,8 @@ namespace OptiBid.Microservices.Accounts.Services.Query.Accounts
         {
             var obj = await _unitOfWork._usersRepository.GetById(request.Id, cancellationToken);
             return obj == null ? 
-                (true, null) :
-                (false, _mapper.Map<Domain.DTOs.UserDetails>(obj));
+                (false, null) :
+                (true, _mapper.Map<Domain.DTOs.UserDetails>(obj));
         }
     }
 }

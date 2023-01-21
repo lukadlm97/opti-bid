@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using OptiBid.Microservices.Accounts.Services.UnitOfWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OptiBid.Microservices.Accounts.Domain.Entities;
 
 namespace OptiBid.Microservices.Accounts.Services.Command.Accounts
@@ -48,13 +43,13 @@ namespace OptiBid.Microservices.Accounts.Services.Command.Accounts
 
             foreach (var skill in existingSkills)
             {
-                if (skills.Any(x => x.ProfessionID == skill.ProfessionID && x.ID == skill.ID))
+                if (skills.Any(x => x.ID == skill.ID))
                 {
-                    var foundedSkill = skills.FirstOrDefault(x => x.ProfessionID == skill.ProfessionID && x.ID == skill.ID);
+                    var foundedSkill = skills.FirstOrDefault(x =>   x.ID == skill.ID);
                     skill.ProfessionID = foundedSkill.ProfessionID;
                     skill.Profession = _unitOfWork._professionRepository.GetAll()
                         .FirstOrDefault(x => x.ID == foundedSkill.ProfessionID);
-                    skill.IsActive = skills.FirstOrDefault(x => x.ID == skill.ID).IsActive;
+                    skill.IsActive = foundedSkill.IsActive;
                     list.Add(skill);
                 }
             }
@@ -75,14 +70,14 @@ namespace OptiBid.Microservices.Accounts.Services.Command.Accounts
 
             foreach (var contact in existingContacts)
             {
-                if (contacts.Any(x => x.ContactTypeID == contact.ContactTypeID && x.ID == contact.ID))
+                if (contacts.Any(x => x.ID == contact.ID))
                 {
                     var foundedContact =
-                        contacts.FirstOrDefault(x => x.ContactTypeID == contact.ContactTypeID && x.ID == contact.ID);
+                        contacts.FirstOrDefault(x => x.ID == contact.ID);
                     contact.ContactTypeID = foundedContact.ContactTypeID;
                     contact.ContactType = foundedContact.ContactType;
-                    contact.IsActive = contacts.FirstOrDefault(x => x.ID == contact.ID).IsActive;
-                    contact.Content= contacts.FirstOrDefault(x => x.ID == contact.ID).Content;
+                    contact.IsActive = foundedContact.IsActive;
+                    contact.Content= foundedContact.Content;
                     list.Add(contact);
                 }
             }
