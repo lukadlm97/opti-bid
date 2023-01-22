@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using OptiBid.Microservices.Accounts.Data.Repository;
+using OptiBid.Microservices.Accounts.Services.Utility;
 
 namespace OptiBid.Microservices.Accounts.Services
 {
@@ -18,6 +19,8 @@ namespace OptiBid.Microservices.Accounts.Services
             services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IAccountRepository), typeof(AccountRepository));
+            services.AddScoped(typeof(IFireForgetHandler), typeof(FireForgetHandler));
+
             services.AddScoped<UnitOfWork.IUnitOfWork, UnitOfWork.UnitOfWork>();
 
             return services;

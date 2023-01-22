@@ -9,6 +9,6 @@ namespace OptiBid.Microservices.Accounts.Messaging.Send.Sender
 {
     public interface IAccountSender
     {
-        void Send(AccountMessage message);
+        Task Send(AccountMessage message);
     }
 }

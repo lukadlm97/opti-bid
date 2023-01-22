@@ -1,5 +1,4 @@
-﻿
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Accounts.Messaging.Send.Configurations;
@@ -18,7 +17,7 @@ namespace OptiBid.Microservices.Accounts.Messaging.Send.Sender
             _rabbitMqConfigs =options.Value;
             CreateConnection();
         }
-        public void Send(AccountMessage message)
+        public async Task Send(AccountMessage message)
         {
             if (ConnectionExists())
             {
@@ -26,7 +25,7 @@ namespace OptiBid.Microservices.Accounts.Messaging.Send.Sender
                 {
                     //channel.QueueDeclare(queue: _rabbitMqConfigs.QueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
 
-                    var json = JsonSerializer.Serialize(message);
+                    var json =  JsonSerializer.Serialize(message);
                     var body = Encoding.UTF8.GetBytes(json);
 
                     channel.BasicPublish(exchange: "", routingKey: _rabbitMqConfigs.QueueName, basicProperties: null, body: body);
