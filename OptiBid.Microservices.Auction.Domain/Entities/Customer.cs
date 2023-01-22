@@ -10,6 +10,7 @@ namespace OptiBid.Microservices.Auction.Domain.Entities
     {
         public int Id { get; set; }
         public int UserID { get; set; }
+        public string Username { get; set; }
         public DateTime DateOpened { get; set; }
         public ICollection<Bid> Bids { get; set; }
 

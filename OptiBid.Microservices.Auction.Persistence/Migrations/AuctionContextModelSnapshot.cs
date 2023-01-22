@@ -30,10 +30,14 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AssetType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("Closed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Discriminator")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -44,14 +48,18 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime?>("StartDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Started")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuctionAssets");
+                    b.ToTable("AuctionAssets", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AuctionAsset");
+                    b.HasDiscriminator<string>("AssetType").HasValue("AuctionAsset");
 
                     b.UseTphMappingStrategy();
                 });
@@ -68,6 +76,7 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("BidDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal>("BidPrice")
@@ -88,17 +97,47 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
             modelBuilder.Entity("OptiBid.Microservices.Auction.Domain.Entities.Customer", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<DateTime>("DateOpened")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("UserID")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("OptiBid.Microservices.Auction.Domain.Entities.MediaUrl", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("AuctionAssetId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("AuctionAssetId");
+
+                    b.ToTable("MediaUrl");
                 });
 
             modelBuilder.Entity("OptiBid.Microservices.Auction.Domain.Entities.ProductCategory", b =>
@@ -139,10 +178,10 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
                 {
                     b.HasBaseType("OptiBid.Microservices.Auction.Domain.Entities.AuctionAsset");
 
-                    b.Property<int?>("CategoryID")
+                    b.Property<int?>("ProductCategoryID")
                         .HasColumnType("integer");
 
-                    b.HasIndex("CategoryID");
+                    b.HasIndex("ProductCategoryID");
 
                     b.HasDiscriminator().HasValue("Product");
                 });
@@ -151,16 +190,10 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
                 {
                     b.HasBaseType("OptiBid.Microservices.Auction.Domain.Entities.AuctionAsset");
 
-                    b.Property<int?>("CategoryID")
+                    b.Property<int?>("ServiceCategoryID")
                         .HasColumnType("integer");
 
-                    b.HasIndex("CategoryID");
-
-                    b.ToTable(t =>
-                        {
-                            t.Property("CategoryID")
-                                .HasColumnName("Service_CategoryID");
-                        });
+                    b.HasIndex("ServiceCategoryID");
 
                     b.HasDiscriminator().HasValue("Service");
                 });
@@ -184,27 +217,36 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
                     b.Navigation("Customer");
                 });
 
+            modelBuilder.Entity("OptiBid.Microservices.Auction.Domain.Entities.MediaUrl", b =>
+                {
+                    b.HasOne("OptiBid.Microservices.Auction.Domain.Entities.AuctionAsset", null)
+                        .WithMany("MediaUrls")
+                        .HasForeignKey("AuctionAssetId");
+                });
+
             modelBuilder.Entity("OptiBid.Microservices.Auction.Domain.Entities.Product", b =>
                 {
-                    b.HasOne("OptiBid.Microservices.Auction.Domain.Entities.ProductCategory", "Category")
+                    b.HasOne("OptiBid.Microservices.Auction.Domain.Entities.ProductCategory", "ProductCategory")
                         .WithMany()
-                        .HasForeignKey("CategoryID");
+                        .HasForeignKey("ProductCategoryID");
 
-                    b.Navigation("Category");
+                    b.Navigation("ProductCategory");
                 });
 
             modelBuilder.Entity("OptiBid.Microservices.Auction.Domain.Entities.Service", b =>
                 {
-                    b.HasOne("OptiBid.Microservices.Auction.Domain.Entities.ServiceCategory", "Category")
+                    b.HasOne("OptiBid.Microservices.Auction.Domain.Entities.ServiceCategory", "ServiceCategory")
                         .WithMany()
-                        .HasForeignKey("CategoryID");
+                        .HasForeignKey("ServiceCategoryID");
 
-                    b.Navigation("Category");
+                    b.Navigation("ServiceCategory");
                 });
 
             modelBuilder.Entity("OptiBid.Microservices.Auction.Domain.Entities.AuctionAsset", b =>
                 {
                     b.Navigation("Bids");
+
+                    b.Navigation("MediaUrls");
                 });
 
             modelBuilder.Entity("OptiBid.Microservices.Auction.Domain.Entities.Customer", b =>

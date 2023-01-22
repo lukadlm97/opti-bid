@@ -1,0 +1,28 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "OptiBid.Microservices.Auction.Grpc.CustomersServiceDefinition";
+
+package customer;
+
+service Customer {
+  rpc Create (CustomerRequest) returns (CustomerReply);
+  rpc Get (CustomerRequest) returns (CustomerReply);
+}
+
+// The request message containing the user's name.
+message CustomerRequest {
+  int32 userId=1;
+  string username = 2;
+}
+
+// The response message containing the greetings.
+message CustomerReply {
+	int32 customerId=1;
+	OperationCompletionStatus status=2;
+}
+
+enum OperationCompletionStatus{
+	SUCCESS=0;
+	BAD_REQUEST=1;
+	NOT_FOUND=2;
+}

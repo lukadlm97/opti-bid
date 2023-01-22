@@ -10,10 +10,13 @@ namespace OptiBid.Microservices.Auction.Domain.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public bool Closed { get; set; } = false;
-        public DateTime StartDate { get; set; }
+        public bool Started { get; set; } = false;
+        public DateTime? StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public ICollection<Bid>    Bids { get; set; }
+        public ICollection<MediaUrl> MediaUrls { get; set; }
 
     }
 }

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace OptiBid.Microservices.Auction.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class initaldbcreation202301220124 : Migration
+    public partial class initaldbschemacreation202322012016 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,8 +16,10 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserID = table.Column<int>(type: "integer", nullable: false),
+                    Username = table.Column<string>(type: "text", nullable: false),
                     DateOpened = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -58,23 +60,25 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
                     Closed = table.Column<bool>(type: "boolean", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Started = table.Column<bool>(type: "boolean", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Discriminator = table.Column<string>(type: "text", nullable: false),
-                    CategoryID = table.Column<int>(type: "integer", nullable: true),
-                    ServiceCategoryID = table.Column<int>(name: "Service_CategoryID", type: "integer", nullable: true)
+                    AssetType = table.Column<string>(type: "text", nullable: false),
+                    ProductCategoryID = table.Column<int>(type: "integer", nullable: true),
+                    ServiceCategoryID = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AuctionAssets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AuctionAssets_ProductCategories_CategoryID",
-                        column: x => x.CategoryID,
+                        name: "FK_AuctionAssets_ProductCategories_ProductCategoryID",
+                        column: x => x.ProductCategoryID,
                         principalTable: "ProductCategories",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_AuctionAssets_ServiceCategories_Service_CategoryID",
+                        name: "FK_AuctionAssets_ServiceCategories_ServiceCategoryID",
                         column: x => x.ServiceCategoryID,
                         principalTable: "ServiceCategories",
                         principalColumn: "Id");
@@ -99,24 +103,43 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
                         column: x => x.AuctionAssetId,
                         principalTable: "AuctionAssets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Bids_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MediaUrl",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Url = table.Column<string>(type: "text", nullable: false),
+                    AuctionAssetId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MediaUrl", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_MediaUrl_AuctionAssets_AuctionAssetId",
+                        column: x => x.AuctionAssetId,
+                        principalTable: "AuctionAssets",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuctionAssets_CategoryID",
+                name: "IX_AuctionAssets_ProductCategoryID",
                 table: "AuctionAssets",
-                column: "CategoryID");
+                column: "ProductCategoryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuctionAssets_Service_CategoryID",
+                name: "IX_AuctionAssets_ServiceCategoryID",
                 table: "AuctionAssets",
-                column: "Service_CategoryID");
+                column: "ServiceCategoryID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bids_AuctionAssetId",
@@ -127,6 +150,11 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
                 name: "IX_Bids_CustomerId",
                 table: "Bids",
                 column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MediaUrl_AuctionAssetId",
+                table: "MediaUrl",
+                column: "AuctionAssetId");
         }
 
         /// <inheritdoc />
@@ -136,10 +164,13 @@ namespace OptiBid.Microservices.Auction.Persistence.Migrations
                 name: "Bids");
 
             migrationBuilder.DropTable(
-                name: "AuctionAssets");
+                name: "MediaUrl");
 
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "AuctionAssets");
 
             migrationBuilder.DropTable(
                 name: "ProductCategories");

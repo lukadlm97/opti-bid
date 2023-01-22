@@ -4,12 +4,11 @@ using OptiBid.Microservices.Auction.Domain.Entities;
 
 namespace OptiBid.Microservices.Auction.Persistence.Configuration
 {
-    public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
+    public class BidConfiguration : IEntityTypeConfiguration<Bid>
     {
-        public void Configure(EntityTypeBuilder<Customer> builder)
+        public void Configure(EntityTypeBuilder<Bid> builder)
         {
-            builder.Property(customer => customer.DateOpened).ValueGeneratedOnAdd();
-
+            builder.Property(bid => bid.BidDate).ValueGeneratedOnAdd();
         }
     }
 }

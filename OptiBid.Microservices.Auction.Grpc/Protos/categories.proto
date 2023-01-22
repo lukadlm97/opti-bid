@@ -1,0 +1,26 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "OptiBid.Microservices.Auction.Grpc.CategoriesServiceDefinition";
+
+package categories;
+
+// The greeting service definition.
+service Category {
+  // Sends a greeting
+  rpc GetProducts (EmptyRequest) returns (CollectionReplay);
+  rpc GetServices (EmptyRequest) returns (CollectionReplay);
+}
+
+// The request message containing the user's name.
+message EmptyRequest {
+}
+
+message CollectionReplay{
+	repeated DataReply categories=1;
+}
+
+// The response message containing the greetings.
+message DataReply {
+	int32 id=1;
+  string name = 2;
+}

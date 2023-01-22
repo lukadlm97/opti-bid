@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace OptiBid.Microservices.Auction.Domain.Entities
 {
-    public class Product:AuctionAsset
+    public class MediaUrl
     {
-        public int? ProductCategoryID { get; set; }
-        public ProductCategory? ProductCategory { get; set; }
-
+        public int ID { get; set; }
+        public string Url { get; set; }
     }
 }
