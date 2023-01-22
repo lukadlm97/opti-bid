@@ -10,9 +10,11 @@ namespace OptiBid.Microservices.Auction.Services
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            
+            services.AddScoped(typeof(ICustomerRepository), typeof(CustomerRepository));
+
             services.AddScoped(typeof(IProductCategory), typeof(ProductCategory));
             services.AddScoped(typeof(IServiceCategory), typeof(ServiceCategory));
+            services.AddScoped(typeof(ICustomerService), typeof(CustomerService));
 
 
             services.AddScoped<UnitOfWork.IUnitOfWork, UnitOfWork.UnitOfWork>();

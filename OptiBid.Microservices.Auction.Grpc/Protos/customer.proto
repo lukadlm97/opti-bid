@@ -6,13 +6,34 @@ package customer;
 
 service Customer {
   rpc Create (CustomerRequest) returns (CustomerReply);
-  rpc Get (CustomerRequest) returns (CustomerReply);
+  rpc Get (CustomerRequest) returns (CustomerDetailsReplay);
+  rpc GetAll (EmptyRequest) returns (CustomerCollection);
+}
+
+message EmptyRequest{
+
 }
 
 // The request message containing the user's name.
 message CustomerRequest {
   int32 userId=1;
   string username = 2;
+}
+
+message CustomerCollection{
+	repeated CustomerDetails customers=1;
+	OperationCompletionStatus status=2;
+}
+message CustomerDetailsReplay{
+	CustomerDetails customer=1;
+	OperationCompletionStatus status=2;
+}
+
+message CustomerDetails{
+	int32 id=1;
+	int32 userId=2;
+	string username=3;
+	string dateOpened=4;
 }
 
 // The response message containing the greetings.
