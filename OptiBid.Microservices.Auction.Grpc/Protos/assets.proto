@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+option csharp_namespace = "OptiBid.Microservices.Auction.Grpc.AuctionAssetsServiceDefinition";
+
+package assets;
+
+import "google/protobuf/timestamp.proto";
+// The greeting service definition.
+service AuctionAssets {
+  // Sends a greeting
+  rpc GetAll (AssetsRequest) returns (AssetsReply);
+  rpc GetById(SingleAssetsRequest) returns (AssetReply);
+  rpc Delete(SingleAssetsRequest) returns (AddAssetReplay);
+  rpc Update(AddAssetRequest) returns (AddAssetReplay);
+  rpc Add(AddAssetRequest) returns (AddAssetReplay);
+}
+
+message AssetsRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+}
+
+message SingleAssetsRequest {
+  int32 id = 1;
+}
+
+message AssetsReply{
+	repeated SingleAssetReply assets=1;
+    int32 totalAvailable=2;
+}
+
+message SingleAssetReply {
+    int32 id=1;
+     string name=2;
+     string description=3;
+     bool closed=4;
+     bool started=5;
+     google.protobuf.Timestamp  startDate =6;
+     google.protobuf.Timestamp  endDate =7;
+     oneof category{
+         int32 productTypeId=8;
+         int32 serviceTypeId=9;
+     }
+	repeated string mediaUrl=10;
+}
+
+
+message AddAssetRequest{
+     string name=1;
+     string description=2;
+     bool closed=3;
+     bool started=4;
+     google.protobuf.Timestamp startDate =5;
+     google.protobuf.Timestamp endDate =6;
+     oneof category{
+         int32 productTypeId=7;
+         int32 serviceTypeId=8;
+     }	
+     repeated string mediaUrl=9;
+     int32 customerId=10;
+}
+
+message AddAssetReplay{
+    OperationCompletionStatus status=1;
+    int32 assetId=2;
+}
+
+
+message AssetReply{
+    OperationCompletionStatus status=1;
+    SingleAssetReply asset=2;
+}
+
+enum OperationCompletionStatus{
+	SUCCESS=0;
+	BAD_REQUEST=1;
+	NOT_FOUND=2;
+}

@@ -19,10 +19,12 @@ namespace OptiBid.Microservices.Auction.Services.UnitOfWork
             _productCategoryRepository = new Repository<ProductCategory>(_auctionContext);
             _serviceCategoryRepository = new Repository<ServiceCategory>(_auctionContext);
             _customerRepository=new CustomerRepository(_auctionContext);
+            _auctionAssetsRepository = new AuctionAssetsRepository(_auctionContext);
         }
         public IRepository<ProductCategory> _productCategoryRepository { get; }
         public IRepository<ServiceCategory> _serviceCategoryRepository { get; }
         public ICustomerRepository _customerRepository { get; }
+        public IAuctionAssetsRepository _auctionAssetsRepository { get; }
 
         public async Task Commit(CancellationToken cancellationToken = default)
         {

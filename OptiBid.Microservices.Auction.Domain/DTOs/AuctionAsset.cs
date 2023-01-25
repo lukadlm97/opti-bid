@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OptiBid.Microservices.Auction.Domain.Entities
+namespace OptiBid.Microservices.Auction.Domain.DTOs
 {
     public class AuctionAsset
     {
@@ -15,10 +15,8 @@ namespace OptiBid.Microservices.Auction.Domain.Entities
         public bool Started { get; set; } = false;
         public DateTime? StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public ICollection<Bid>    Bids { get; set; }
-        public ICollection<MediaUrl> MediaUrls { get; set; }
-        public Customer Customer { get; set; }
-        public int CustomerID { get; set; }
-
+        public int? ProductTypeId { get; set; }
+        public int? ServiceTypeId { get; set; }
+        public IEnumerable<string> MediaUrls { get; set; }
     }
 }

@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OptiBid.Microservices.Auction.Data\OptiBid.Microservices.Auction.Data.csproj" />
     <ProjectReference Include="..\OptiBid.Microservices.Auction.Domain\OptiBid.Microservices.Auction.Domain.csproj" />
+    <ProjectReference Include="..\OptiBid.Microservices.Auction.Messaging.Sender\OptiBid.Microservices.Auction.Messaging.Sender.csproj" />
   </ItemGroup>
 
 </Project>

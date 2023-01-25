@@ -9,11 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Protos\assets.proto" />
     <None Remove="Protos\categories.proto" />
     <None Remove="Protos\customer.proto" />
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\assets.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\categories.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\customer.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
@@ -30,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OptiBid.Microservices.Auction.Domain\OptiBid.Microservices.Auction.Domain.csproj" />
+    <ProjectReference Include="..\OptiBid.Microservices.Auction.Messaging.Sender\OptiBid.Microservices.Auction.Messaging.Sender.csproj" />
     <ProjectReference Include="..\OptiBid.Microservices.Auction.Persistence\OptiBid.Microservices.Auction.Persistence.csproj" />
     <ProjectReference Include="..\OptiBid.Microservices.Auction.Services\OptiBid.Microservices.Auction.Services.csproj" />
   </ItemGroup>

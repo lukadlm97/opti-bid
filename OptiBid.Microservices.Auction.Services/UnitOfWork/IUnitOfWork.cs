@@ -8,6 +8,7 @@ namespace OptiBid.Microservices.Auction.Services.UnitOfWork
 
         IRepository<Microservices.Auction.Domain.Entities.ServiceCategory> _serviceCategoryRepository { get; }
         ICustomerRepository _customerRepository { get; }
+        IAuctionAssetsRepository _auctionAssetsRepository { get; }
 
         Task Commit(CancellationToken cancellationToken = default);
     }
