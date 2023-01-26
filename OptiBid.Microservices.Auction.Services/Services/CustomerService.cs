@@ -28,7 +28,7 @@ namespace OptiBid.Microservices.Auction.Services.Services
                 return customerResponse;
             }
 
-            var customer = await _unitOfWork._customerRepository.FindByIdAsync(userId, cancellationToken);
+            var customer = await _unitOfWork._customerRepository.FindByUserIdAsync(userId, cancellationToken);
             if (customer == null)
             {
                 customerResponse.SearchStatus = SearchStatus.NotFound;
@@ -69,7 +69,7 @@ namespace OptiBid.Microservices.Auction.Services.Services
             try
             {
                 var existingCustomer =
-                    await _unitOfWork._customerRepository.FindByIdAsync(customer.UserID, cancellationToken);
+                    await _unitOfWork._customerRepository.FindByUserIdAsync(customer.UserID, cancellationToken);
                 if (existingCustomer != null)
                 {
                     customerResponse.CreationStatus = CreationStatus.Exist;

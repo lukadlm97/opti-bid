@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddGrpc();
 builder.Services.Configure<DbSettings>(builder.Configuration.GetSection("DbSettings"));
 builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMq"));
+builder.Services.Configure<MqSettings>(builder.Configuration.GetSection("MqSettings"));
 builder.Services.AddDbContext<AuctionContext>(options =>
     options.UseNpgsql(builder.Configuration.GetSection("DbSettings")["ConnectionString"]));
 builder.Services.AddApplication();

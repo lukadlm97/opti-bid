@@ -20,6 +20,7 @@ namespace OptiBid.Microservices.Auction.Services
             services.AddScoped(typeof(IServiceCategory), typeof(ServiceCategory));
             services.AddScoped(typeof(ICustomerService), typeof(CustomerService));
             services.AddScoped(typeof(IAuctionAssetService), typeof(AuctionAssetService));
+            services.AddScoped(typeof(IBidService), typeof(BidService));
 
 
             services.AddScoped<UnitOfWork.IUnitOfWork, UnitOfWork.UnitOfWork>();

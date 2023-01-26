@@ -32,5 +32,22 @@ namespace OptiBid.Microservices.Auction.Services.Utilities
                 }
             });
         }
+
+        public void Execute(Func<IBidSender, Task> asyncWork)
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    using var scope = _serviceScopeFactory.CreateScope();
+                    var sender = scope.ServiceProvider.GetRequiredService<IBidSender>();
+                    await asyncWork(sender);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+        }
     }
 }

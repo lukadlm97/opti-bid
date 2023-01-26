@@ -13,9 +13,14 @@ namespace OptiBid.Microservices.Auction.Data.Repositories
             _auctionContext = auctionContext;
         }
 
-        public async Task<Customer?> FindByIdAsync(int userId,CancellationToken cancellationToken=default)
+        public async Task<Customer?> FindByUserIdAsync(int userId,CancellationToken cancellationToken=default)
         {
             return await _auctionContext.Customers.FirstOrDefaultAsync(x => x.UserID == userId,cancellationToken);
+        }
+
+        public async Task<Customer?> FindByUsername(string username, CancellationToken cancellationToken = default)
+        {
+            return await _auctionContext.Customers.FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
         }
 
         public async Task<Customer?> FindById(int id, CancellationToken cancellationToken = default)

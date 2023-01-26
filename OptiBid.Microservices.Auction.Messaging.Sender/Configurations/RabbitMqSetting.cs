@@ -6,7 +6,7 @@ namespace OptiBid.Microservices.Auction.Messaging.Sender.Configurations
     {
         public string Hostname { get; set; }
 
-        public string QueueName { get; set; }
+       
 
         public string UserName { get; set; }
 

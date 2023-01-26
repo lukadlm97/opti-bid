@@ -21,7 +21,8 @@ namespace OptiBid.Microservices.Auction.Data.Repositories
         public async Task<AuctionAsset> GetById(int id, CancellationToken cancellationToken = default)
         {
             return await _auctionContext.AuctionAssets
-                .Include(x => x.MediaUrls).FirstAsync(x=>x.Id==id,cancellationToken);
+                .Include(x => x.MediaUrls)
+                .Include(x=>x.Bids).FirstAsync(x=>x.Id==id,cancellationToken);
         }
 
         public async Task Delete(AuctionAsset auctionAsset, CancellationToken cancellationToken = default)

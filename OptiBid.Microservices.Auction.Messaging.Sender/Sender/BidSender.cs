@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Auction.Messaging.Sender.Configurations;
 using OptiBid.Microservices.Auction.Messaging.Sender.Factory;
@@ -12,20 +9,20 @@ using RabbitMQ.Client;
 
 namespace OptiBid.Microservices.Auction.Messaging.Sender.Sender
 {
-    public class AuctionAssetsSender:IAuctionAssetsSender
+    public class BidSender:IBidSender
     {
-        private readonly IMqConnectionFactory _mqConnectionFactory;
+        private IMqConnectionFactory _connectionFactory;
         private readonly MqSettings _mqSettings;
 
-        public AuctionAssetsSender(IMqConnectionFactory mqConnectionFactory,IOptions<MqSettings> options)
+        public BidSender(IOptions<MqSettings> options, IMqConnectionFactory connectionFactory)
         {
-            _mqConnectionFactory = mqConnectionFactory;
             _mqSettings = options.Value;
+            _connectionFactory=connectionFactory;
         }
-        public async Task Send(AuctionAssetMessage message)
+        public async Task Send(BidMessage message)
         {
-          
-                using (var channel = _mqConnectionFactory.GetConnection().CreateModel())
+    
+                using (var channel = _connectionFactory.GetConnection().CreateModel())
                 {
                     //channel.QueueDeclare(queue: _rabbitMqConfigs.QueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
 
@@ -36,5 +33,6 @@ namespace OptiBid.Microservices.Auction.Messaging.Sender.Sender
                 }
             
         }
+        
     }
 }

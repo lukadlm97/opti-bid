@@ -30,9 +30,5 @@ namespace OptiBid.Microservices.Auction.Messaging.Sender.Models
         Deleted
     }
 
-    public enum AssetType
-    {
-        Product,
-        Service
-    }
+    
 }

@@ -12,6 +12,7 @@
     <None Remove="Protos\assets.proto" />
     <None Remove="Protos\categories.proto" />
     <None Remove="Protos\customer.proto" />
+    <None Remove="Protos\customTypes.proto" />
   </ItemGroup>
 
   <ItemGroup>

@@ -13,6 +13,8 @@ service AuctionAssets {
   rpc Delete(SingleAssetsRequest) returns (AddAssetReplay);
   rpc Update(AddAssetRequest) returns (AddAssetReplay);
   rpc Add(AddAssetRequest) returns (AddAssetReplay);
+  rpc AddBid(BidRequest)returns (BidReplay);
+  rpc GetBids(SingleAssetsRequest) returns (MultipleBidReplay);
 }
 
 message AssetsRequest {
@@ -76,3 +78,31 @@ enum OperationCompletionStatus{
 	BAD_REQUEST=1;
 	NOT_FOUND=2;
 }
+
+message BidRequest{
+    float bidPrice=1;
+     google.protobuf.Timestamp bidDate =6;
+     int32 auctionAssetId=3;
+     string customerUsername=4;
+}
+message BidReplay{
+    OperationCompletionStatus status=1;
+    SingleBidReplay singleBid=2;
+}
+message MultipleBidReplay{
+    OperationCompletionStatus status=1;
+    repeated SingleBidDetails singleBids=2;
+}
+
+message SingleBidDetails{
+            int32 bidId =1;
+            float bidPrice=2;
+         google.protobuf.Timestamp bidDate =3;
+         int32 auctionAssetId=4;
+         string customerID=5;
+}
+
+message SingleBidReplay{
+    int32 bidId=1;
+}
+

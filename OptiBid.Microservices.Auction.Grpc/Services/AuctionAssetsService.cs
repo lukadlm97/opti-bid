@@ -1,6 +1,4 @@
-﻿
-
-using AutoMapper;
+﻿using AutoMapper;
 using Grpc.Core;
 using OptiBid.Microservices.Auction.Grpc.AuctionAssetsServiceDefinition;
 using OptiBid.Microservices.Auction.Services.Enumerations;
@@ -12,11 +10,13 @@ namespace OptiBid.Microservices.Auction.Grpc.Services
     {
         private readonly IAuctionAssetService _auctionAssetService;
         private readonly IMapper _mapper;
+        private readonly IBidService _bidService;
 
-        public AuctionAssetsService(IAuctionAssetService auctionAssetService,IMapper mapper)
+        public AuctionAssetsService(IAuctionAssetService auctionAssetService,IMapper mapper,IBidService bidService)
         {
             _auctionAssetService = auctionAssetService;
             _mapper = mapper;
+            _bidService = bidService;
         }
 
         public override async Task<AddAssetReplay> Add(AddAssetRequest request, ServerCallContext context)
@@ -137,6 +137,50 @@ namespace OptiBid.Microservices.Auction.Grpc.Services
                 _ => new AddAssetReplay()
                 {
                     Status = OperationCompletionStatus.BadRequest
+                }
+            };
+        }
+
+        public override async Task<BidReplay> AddBid(BidRequest request, ServerCallContext context)
+        {
+            var response = await _bidService.Add(_mapper.Map<Domain.Input.Bid>(request), context.CancellationToken);
+            
+            return response.CreationStatus switch
+            {
+                CreationStatus.Success=>new BidReplay()
+                {
+                    Status = OperationCompletionStatus.Success,
+                    SingleBid = _mapper.Map<SingleBidReplay>(response.Bid)
+                },
+                CreationStatus.BadRequest=> new BidReplay()
+                {
+                    Status = OperationCompletionStatus.BadRequest
+                },
+                _ => new BidReplay()
+                {
+                    Status = OperationCompletionStatus.NotFound
+                }
+            };
+        }
+
+        public override async Task<MultipleBidReplay> GetBids(SingleAssetsRequest request, ServerCallContext context)
+        {
+            var response = await _bidService.GetByAssetsById(request.Id, context.CancellationToken);
+
+            return response.SearchStatus switch
+            {
+                SearchStatus.Success=>new MultipleBidReplay()
+                {
+                    Status = OperationCompletionStatus.Success,
+                    SingleBids = { _mapper.Map<IEnumerable<AuctionAssetsServiceDefinition.SingleBidDetails>>(response.Bids) }
+                },
+                SearchStatus.BadRequest=>new MultipleBidReplay()
+                {
+                    Status = OperationCompletionStatus.BadRequest
+                },
+                _ => new MultipleBidReplay()
+                {
+                    Status = OperationCompletionStatus.NotFound
                 }
             };
         }
