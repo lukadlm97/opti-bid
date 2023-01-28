@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using OptiBid.Microservices.Messaging.Receving.MessageQueue;
 using OptiBid.Microservices.Messaging.Receving.Models;
 
 namespace OptiBid.API.Hubs
