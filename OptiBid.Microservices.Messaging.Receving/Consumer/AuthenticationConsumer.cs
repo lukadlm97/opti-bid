@@ -39,6 +39,7 @@ namespace OptiBid.Microservices.Messaging.Receving.Consumer
 
                     var consumer = new AsyncEventingBasicConsumer(channel);
                     consumer.Received += Consumer_Recived;
+                    channel.BasicConsume(_queueNames.AuctionQueueName, true, consumer);
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Channels;
+﻿using System.Threading;
+using System.Threading.Channels;
 using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Messaging.Receving.Configuration;
 using OptiBid.Microservices.Messaging.Receving.Models;
@@ -31,6 +32,11 @@ namespace OptiBid.Microservices.Messaging.Receving.MessageQueue
             this._observable = _channel.Reader.ToObservable(cancellationToken);
         }
 
+
+        public void Write(NotificationMessage message)
+        {
+             _channel.Writer.TryWrite(message);
+        }
 
         public ValueTask WriteAsync(NotificationMessage message, CancellationToken cancellationToken = default)
         {

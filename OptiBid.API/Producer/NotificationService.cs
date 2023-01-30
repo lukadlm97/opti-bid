@@ -18,17 +18,26 @@ namespace OptiBid.API.Producer
             this._notificationHub = notificationHub;
 
         }
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            foreach (var message in _messageQueue.GetBaseEntities(stoppingToken))
+            Task.Run(async () =>
             {
-                await Handler(message, stoppingToken);
-            }
+                foreach (var message in _messageQueue.GetBaseEntities(stoppingToken))
+                {
+                    await Handler(message, stoppingToken);
+                }
+            }, stoppingToken);
+            return Task.CompletedTask;
+          
         }
 
         async Task Handler(NotificationMessage message,CancellationToken cancellationToken=default)
         {
-            await _notificationHub.Clients.All.SendAsync(message.Content, cancellationToken);
+            if (_notificationHub.Clients != null)
+            {
+
+                await _notificationHub.Clients.All.SendAsync(message.Content, cancellationToken);
+            }
         }
     }
 }

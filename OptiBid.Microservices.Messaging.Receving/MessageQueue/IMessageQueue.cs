@@ -9,6 +9,7 @@ namespace OptiBid.Microservices.Messaging.Receving.MessageQueue
 {
     public interface IMessageQueue
     {
+        void Write(NotificationMessage message);
         ValueTask WriteAsync(NotificationMessage message,
             CancellationToken cancellationToken = default);
 
