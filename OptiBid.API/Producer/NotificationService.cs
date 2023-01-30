@@ -1,5 +1,4 @@
 ﻿using System.Reactive.Linq;
-using System.Threading;
 using Microsoft.AspNetCore.SignalR;
 using OptiBid.API.Hubs;
 using OptiBid.Microservices.Messaging.Receving.MessageQueue;
