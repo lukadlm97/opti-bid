@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using OptiBid.Microservices.Auction.Domain.Entities;
-using OptiBid.Microservices.Auction.Messaging.Sender.Models;
 using OptiBid.Microservices.Auction.Services.Enumerations;
 using OptiBid.Microservices.Auction.Services.Models;
 using OptiBid.Microservices.Auction.Services.UnitOfWork;
 using OptiBid.Microservices.Auction.Services.Utilities;
+using OptiBid.Microservices.Shared.Messaging.DTOs;
+using OptiBid.Microservices.Shared.Messaging.Enumerations;
 
 namespace OptiBid.Microservices.Auction.Services.Services
 {
@@ -123,10 +124,10 @@ namespace OptiBid.Microservices.Auction.Services.Services
                     await _unitOfWork._auctionAssetsRepository.Add(product);
                     await _unitOfWork.Commit(cancellationToken);
 
-                    _fireForgetHandler.Execute(x => x.Send(new AuctionAssetMessage()
+                    _fireForgetHandler.Execute(x => x.Send(new AuctionMessage()
                     {
-                        ActionType = ActionType.Added,
-                        AssetType = AssetType.Product,
+                        ActionType = AuctionMessageType.Added,
+                        AssetType = AssetMessageType.Product,
                         Description = product.Description,
                         ID = product.Id,
                         Username = customer.Username,
@@ -163,10 +164,10 @@ namespace OptiBid.Microservices.Auction.Services.Services
                 await _unitOfWork.Commit(cancellationToken);
 
 
-                _fireForgetHandler.Execute(x => x.Send(new AuctionAssetMessage()
+                _fireForgetHandler.Execute(x => x.Send(new AuctionMessage()
                 {
-                     ActionType = ActionType.Added,
-                    AssetType = AssetType.Service,
+                     ActionType = AuctionMessageType.Added,
+                    AssetType = AssetMessageType.Service,
                     Description = service.Description,
                     ID = service.Id,
                     Username = customer.Username,
@@ -209,10 +210,10 @@ namespace OptiBid.Microservices.Auction.Services.Services
                   
                     await _unitOfWork._auctionAssetsRepository.Update(product);
                     await _unitOfWork.Commit(cancellationToken);
-                    _fireForgetHandler.Execute(x => x.Send(new AuctionAssetMessage()
+                    _fireForgetHandler.Execute(x => x.Send(new AuctionMessage()
                     {
-                        ActionType = ActionType.Added,
-                        AssetType = AssetType.Service,
+                        ActionType = AuctionMessageType.Added,
+                        AssetType = AssetMessageType.Service,
                         Description = product.Description,
                         ID = product.Id,
                         Username = "",
@@ -231,10 +232,10 @@ namespace OptiBid.Microservices.Auction.Services.Services
               
                 await _unitOfWork._auctionAssetsRepository.Update(service);
                 await _unitOfWork.Commit(cancellationToken);
-                _fireForgetHandler.Execute(x => x.Send(new AuctionAssetMessage()
+                _fireForgetHandler.Execute(x => x.Send(new AuctionMessage()
                 {
-                    ActionType = ActionType.Added,
-                    AssetType = AssetType.Service,
+                    ActionType = AuctionMessageType.Added,
+                    AssetType = AssetMessageType.Service,
                     Description = service.Description,
                     ID = service.Id,
                     Username = "",
@@ -272,9 +273,9 @@ namespace OptiBid.Microservices.Auction.Services.Services
 
                 await _unitOfWork._auctionAssetsRepository.Delete(auctionAsset, cancellationToken);
                 await _unitOfWork.Commit(cancellationToken);
-                _fireForgetHandler.Execute(x => x.Send(new AuctionAssetMessage()
+                _fireForgetHandler.Execute(x => x.Send(new AuctionMessage()
                 {
-                    ActionType = ActionType.Deleted,
+                    ActionType = AuctionMessageType.Deleted,
                     AssetType =null,
                     ID = id
                 }));

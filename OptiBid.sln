@@ -47,9 +47,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Microservices.Aucti
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIGateway", "APIGateway", "{55331A8C-CF24-4B32-976A-D4198EF6FADC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.API", "OptiBid.API\OptiBid.API.csproj", "{EABAC793-F186-4CE1-9EC5-CD34A5270A4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.API", "OptiBid.API\OptiBid.API.csproj", "{EABAC793-F186-4CE1-9EC5-CD34A5270A4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Messaging.Receving", "OptiBid.Microservices.Messaging.Receving\OptiBid.Microservices.Messaging.Receving.csproj", "{B8C82D0A-53EF-46A9-8FB4-F2890B5D414A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Microservices.Messaging.Receving", "OptiBid.Microservices.Messaging.Receving\OptiBid.Microservices.Messaging.Receving.csproj", "{B8C82D0A-53EF-46A9-8FB4-F2890B5D414A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{B7D758C2-6870-46F0-8331-E62C96523192}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Shared.Messaging", "OptiBid.Microservices.Shared.Messaging\OptiBid.Microservices.Shared.Messaging.csproj", "{40D95CFC-C0DE-4141-B526-BED87853E39E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +121,10 @@ Global
 		{B8C82D0A-53EF-46A9-8FB4-F2890B5D414A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8C82D0A-53EF-46A9-8FB4-F2890B5D414A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8C82D0A-53EF-46A9-8FB4-F2890B5D414A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40D95CFC-C0DE-4141-B526-BED87853E39E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40D95CFC-C0DE-4141-B526-BED87853E39E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40D95CFC-C0DE-4141-B526-BED87853E39E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40D95CFC-C0DE-4141-B526-BED87853E39E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -144,6 +152,8 @@ Global
 		{55331A8C-CF24-4B32-976A-D4198EF6FADC} = {CF555572-8577-4F3D-B266-E94E1914ED64}
 		{EABAC793-F186-4CE1-9EC5-CD34A5270A4E} = {55331A8C-CF24-4B32-976A-D4198EF6FADC}
 		{B8C82D0A-53EF-46A9-8FB4-F2890B5D414A} = {55331A8C-CF24-4B32-976A-D4198EF6FADC}
+		{B7D758C2-6870-46F0-8331-E62C96523192} = {CF555572-8577-4F3D-B266-E94E1914ED64}
+		{40D95CFC-C0DE-4141-B526-BED87853E39E} = {B7D758C2-6870-46F0-8331-E62C96523192}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D9A83D5A-DFAA-4560-A9D2-4BF12E170CEA}

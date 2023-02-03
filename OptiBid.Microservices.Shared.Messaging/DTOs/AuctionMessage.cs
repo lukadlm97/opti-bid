@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using OptiBid.Microservices.Shared.Messaging.Enumerations;
 
-namespace OptiBid.Microservices.Auction.Messaging.Sender.Models
+namespace OptiBid.Microservices.Shared.Messaging.DTOs
 {
-    public class AuctionAssetMessage
+    public class AuctionMessage
     {
         public int ID { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -16,19 +17,10 @@ namespace OptiBid.Microservices.Auction.Messaging.Sender.Models
         public string Description { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public AssetType? AssetType { get; set; }
+        public AssetMessageType? AssetType { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public ActionType ActionType { get; set; }
+        public AuctionMessageType ActionType { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Username { get; set; }
     }
-
-    public enum ActionType
-    {
-        Added,
-        Updated,
-        Deleted
-    }
-
-    
 }

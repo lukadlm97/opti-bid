@@ -1,10 +1,9 @@
-﻿
-using AutoMapper;
-using OptiBid.Microservices.Auction.Messaging.Sender.Models;
+﻿using AutoMapper;
 using OptiBid.Microservices.Auction.Services.Enumerations;
 using OptiBid.Microservices.Auction.Services.Models;
 using OptiBid.Microservices.Auction.Services.UnitOfWork;
 using OptiBid.Microservices.Auction.Services.Utilities;
+using OptiBid.Microservices.Shared.Messaging.DTOs;
 
 namespace OptiBid.Microservices.Auction.Services.Services
 {

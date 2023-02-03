@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OptiBid.Microservices.Auction.Messaging.Sender.Models
+namespace OptiBid.Microservices.Shared.Messaging.Enumerations
 {
-    public enum AssetType
+    public enum MessageType
     {
-        Product,
-        Service
+        Account,
+        Auction,
+        Bid
     }
 }

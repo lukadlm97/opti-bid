@@ -1,9 +1,8 @@
 ﻿using MediatR;
 using AutoMapper;
-using OptiBid.Microservices.Accounts.Messaging.Send.Models;
-using OptiBid.Microservices.Accounts.Messaging.Send.Sender;
 using OptiBid.Microservices.Accounts.Services.UnitOfWork;
 using OptiBid.Microservices.Accounts.Services.Utility;
+using OptiBid.Microservices.Shared.Messaging.DTOs;
 using User = OptiBid.Microservices.Accounts.Domain.DTOs.User;
 
 namespace OptiBid.Microservices.Accounts.Services.Command.Accounts

@@ -2,7 +2,8 @@
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Accounts.Messaging.Send.Configurations;
-using OptiBid.Microservices.Accounts.Messaging.Send.Models;
+using OptiBid.Microservices.Shared.Messaging.DTOs;
+using OptiBid.Microservices.Shared.Messaging.Enumerations;
 using RabbitMQ.Client;
 
 namespace OptiBid.Microservices.Accounts.Messaging.Send.Sender
@@ -24,8 +25,12 @@ namespace OptiBid.Microservices.Accounts.Messaging.Send.Sender
                 using (var channel = _connection.CreateModel())
                 {
                     //channel.QueueDeclare(queue: _rabbitMqConfigs.QueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
-
-                    var json =  JsonSerializer.Serialize(message);
+                    var transferMessage = new Message()
+                    {
+                        AccountMessage = message,
+                        MessageType = MessageType.Account
+                    };
+                    var json =  JsonSerializer.Serialize(transferMessage);
                     var body = Encoding.UTF8.GetBytes(json);
 
                     channel.BasicPublish(exchange: "", routingKey: _rabbitMqConfigs.QueueName, basicProperties: null, body: body);

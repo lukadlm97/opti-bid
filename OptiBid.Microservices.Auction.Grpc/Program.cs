@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Auction.Domain.Configurations;
 using OptiBid.Microservices.Auction.Grpc.Services;
 using OptiBid.Microservices.Auction.Messaging.Sender;
@@ -14,6 +15,8 @@ builder.Services.AddGrpc();
 builder.Services.Configure<DbSettings>(builder.Configuration.GetSection("DbSettings"));
 builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMq"));
 builder.Services.Configure<MqSettings>(builder.Configuration.GetSection("MqSettings"));
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value);
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<MqSettings>>().Value);
 builder.Services.AddDbContext<AuctionContext>(options =>
     options.UseNpgsql(builder.Configuration.GetSection("DbSettings")["ConnectionString"]));
 builder.Services.AddApplication();

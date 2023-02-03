@@ -1,9 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OptiBid.Microservices.Auction.Messaging.Sender.Factory;
 using OptiBid.Microservices.Auction.Messaging.Sender.Sender;
 
@@ -15,6 +10,8 @@ namespace OptiBid.Microservices.Auction.Messaging.Sender
         {
             services.AddScoped(typeof(IAuctionAssetsSender), typeof(AuctionAssetsSender));
             services.AddScoped(typeof(IBidSender), typeof(BidSender));
+           
+           
             services.AddScoped(typeof(IMqConnectionFactory), typeof(RabbitMqConnectionFactory));
 
             return services;

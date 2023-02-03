@@ -2,9 +2,10 @@
 using MediatR;
 using OptiBid.Microservices.Accounts.Services.UnitOfWork;
 using OptiBid.Microservices.Accounts.Domain.Entities;
-using OptiBid.Microservices.Accounts.Messaging.Send.Models;
 using OptiBid.Microservices.Accounts.Messaging.Send.Sender;
 using OptiBid.Microservices.Accounts.Services.Utility;
+using OptiBid.Microservices.Shared.Messaging.DTOs;
+using OptiBid.Microservices.Shared.Messaging.Enumerations;
 
 namespace OptiBid.Microservices.Accounts.Services.Command.Accounts
 {
@@ -38,7 +39,7 @@ namespace OptiBid.Microservices.Accounts.Services.Command.Accounts
                 await _unitOfWork.Commit(cancellationToken);
                 _fireForgetHandler.Execute(x=>x.Send(new AccountMessage()
                 {
-                    MessageType = MessageType.Update,
+                    AccountMessageType = AccountMessageType.Update,
                     Name = request.User.FirstName + " " + request.User.LastName,
                     RoleName = request.User.UserRole.Name,
                     UserName = request.User.Username

@@ -64,8 +64,9 @@ namespace OptiBid.API.Consumers
                             });
                         };
                         channel.BasicConsume(_queueNames.AuctionQueueName, true, consumer);
-                        await Task.Delay(TimeSpan.FromSeconds(10),cancellationToken);
                     }
+
+                    await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken);
                 }
                 catch (Exception ex)
                 {
