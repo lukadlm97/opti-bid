@@ -7,6 +7,7 @@ using OptiBid.Microservices.Messaging.Receving.Configuration;
 using OptiBid.Microservices.Messaging.Receving.Consumer;
 using OptiBid.Microservices.Messaging.Receving.Factories;
 using OptiBid.Microservices.Messaging.Receving.MessageQueue;
+using OptiBid.Microservices.Messaging.Receving.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<IMessageQueue, NotificationMessageQueue>();
 builder.Services.AddSingleton<IMqConnectionFactory, RabbitMqConnectionFactory>();
 builder.Services.AddSingleton<NotificationHub>();
+builder.Services.AddSingleton<ConnectionManager>();
 
 builder.Services.AddHostedService<NotificationService>();
 builder.Services.AddHostedService<AuctionConsumer>();

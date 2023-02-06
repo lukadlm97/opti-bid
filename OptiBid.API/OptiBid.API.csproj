@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OptiBid.Microservices.Messaging.Receving\OptiBid.Microservices.Messaging.Receving.csproj" />
+    <ProjectReference Include="..\OptiBid.Microservices.Shared.Messaging\OptiBid.Microservices.Shared.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

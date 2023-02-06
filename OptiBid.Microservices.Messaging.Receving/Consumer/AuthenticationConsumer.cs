@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Messaging.Receving.Configuration;
 using OptiBid.Microservices.Messaging.Receving.Factories;
 using OptiBid.Microservices.Messaging.Receving.MessageQueue;
 using OptiBid.Microservices.Messaging.Receving.Models;
+using OptiBid.Microservices.Shared.Messaging.DTOs;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -48,10 +50,7 @@ namespace OptiBid.Microservices.Messaging.Receving.Consumer
         {
             var body = args.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            await _messageQueue.WriteAsync(new NotificationMessage()
-            {
-                Content = message
-            }, default);
+            await _messageQueue.WriteAsync(JsonSerializer.Deserialize<Message>(message), default);
         }
     }
 }

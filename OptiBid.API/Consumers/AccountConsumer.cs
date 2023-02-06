@@ -1,24 +1,22 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Text;
+using System.Text.Json;
+using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Messaging.Receving.Configuration;
+using OptiBid.Microservices.Messaging.Receving.Factories;
 using OptiBid.Microservices.Messaging.Receving.MessageQueue;
 using OptiBid.Microservices.Messaging.Receving.Models;
-using RabbitMQ.Client.Events;
-using System.Text;
-using System.Text.Json;
-using OptiBid.Microservices.Messaging.Receving.Factories;
 using RabbitMQ.Client;
-using System.Threading;
-using OptiBid.Microservices.Shared.Messaging.DTOs;
+using RabbitMQ.Client.Events;
 
 namespace OptiBid.API.Consumers
 {
-    public class AuctionConsumer : BackgroundService
+    public class AccountConsumer : BackgroundService
     {
         private readonly IMqConnectionFactory _mqConnectionFactory;
         private readonly RabbitMqQueueSettings _queueNames;
         private readonly IMessageQueue _messageQueue;
 
-        public AuctionConsumer(IMqConnectionFactory mqConnectionFactory,
+        public AccountConsumer(IMqConnectionFactory mqConnectionFactory,
             IOptions<RabbitMqQueueSettings> options,
             IMessageQueue messageQueue)
         {
@@ -27,7 +25,7 @@ namespace OptiBid.API.Consumers
             _messageQueue = messageQueue;
 
         }
-        
+
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             Task.Run(async () =>
@@ -50,9 +48,13 @@ namespace OptiBid.API.Consumers
                         {
                             var body = ea.Body.ToArray();
                             var message = Encoding.UTF8.GetString(body);
-                             _messageQueue.Write(JsonSerializer.Deserialize<Message>(message));
+                            JsonSerializer.Deserialize<Message>()
+                            _messageQueue.Write(new NotificationMessage()
+                            {
+                                Content = message
+                            });
                         };
-                        channel.BasicConsume(_queueNames.AuctionQueueName, true, consumer);
+                        channel.BasicConsume(_queueNames.AccountsQueueName, true, consumer);
                     }
 
                     await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken);
@@ -61,9 +63,9 @@ namespace OptiBid.API.Consumers
                 {
                     Console.WriteLine(ex.Message);
                 }
-              
+
             }
         }
-        
+
     }
 }

@@ -4,20 +4,21 @@ using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Messaging.Receving.Configuration;
 using OptiBid.Microservices.Messaging.Receving.Models;
 using OptiBid.Microservices.Messaging.Receving.Utilities;
+using OptiBid.Microservices.Shared.Messaging.DTOs;
 
 namespace OptiBid.Microservices.Messaging.Receving.MessageQueue
 {
     public class NotificationMessageQueue:IMessageQueue
     {
         private readonly ChannelSettings _channelSettings;
-        private readonly Channel<NotificationMessage> _channel;
-        private IObservable<NotificationMessage> _observable;
+        private readonly Channel<Message> _channel;
+        private IObservable<Message> _observable;
 
 
         public NotificationMessageQueue(IOptions<ChannelSettings> options)
         {
             _channelSettings = options.Value;
-            _channel = Channel.CreateBounded<NotificationMessage>(new BoundedChannelOptions(_channelSettings.Capacity)
+            _channel = Channel.CreateBounded<Message>(new BoundedChannelOptions(_channelSettings.Capacity)
             {
                 SingleReader = true,
                 SingleWriter = false,
@@ -33,22 +34,22 @@ namespace OptiBid.Microservices.Messaging.Receving.MessageQueue
         }
 
 
-        public void Write(NotificationMessage message)
+        public void Write(Message message)
         {
              _channel.Writer.TryWrite(message);
         }
 
-        public ValueTask WriteAsync(NotificationMessage message, CancellationToken cancellationToken = default)
+        public ValueTask WriteAsync(Message message, CancellationToken cancellationToken = default)
         {
             return _channel.Writer.WriteAsync(message, cancellationToken);
         }
 
-        public IAsyncEnumerable<NotificationMessage> ReadAll(CancellationToken cancellationToken = default)
+        public IAsyncEnumerable<Message> ReadAll(CancellationToken cancellationToken = default)
         {
             return _channel.Reader.ReadAllAsync(cancellationToken);
         }
 
-        public IObservable<NotificationMessage> GetBaseEntities(CancellationToken cancellationToken = default)
+        public IObservable<Message> GetBaseEntities(CancellationToken cancellationToken = default)
         {
 
             return this._observable;

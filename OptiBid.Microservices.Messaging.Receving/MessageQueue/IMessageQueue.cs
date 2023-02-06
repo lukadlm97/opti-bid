@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OptiBid.Microservices.Messaging.Receving.Models;
+﻿
+using OptiBid.Microservices.Shared.Messaging.DTOs;
 
 namespace OptiBid.Microservices.Messaging.Receving.MessageQueue
 {
     public interface IMessageQueue
     {
-        void Write(NotificationMessage message);
-        ValueTask WriteAsync(NotificationMessage message,
+        void Write(Message message);
+        ValueTask WriteAsync(Message message,
             CancellationToken cancellationToken = default);
 
-        IAsyncEnumerable<NotificationMessage> ReadAll(CancellationToken cancellationToken = default);
+        IAsyncEnumerable<Message> ReadAll(CancellationToken cancellationToken = default);
 
-        IObservable<NotificationMessage> GetBaseEntities(CancellationToken cancellationToken = default);
+        IObservable<Message> GetBaseEntities(CancellationToken cancellationToken = default);
 
     }
 }
