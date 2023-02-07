@@ -1,7 +1,6 @@
 ﻿using System.Reactive.Linq;
 using OptiBid.API.Hubs;
 using OptiBid.Microservices.Messaging.Receving.MessageQueue;
-using OptiBid.Microservices.Messaging.Receving.Models;
 using OptiBid.Microservices.Shared.Messaging.DTOs;
 using OptiBid.Microservices.Shared.Messaging.Enumerations;
 
@@ -11,13 +10,11 @@ namespace OptiBid.API.Producer
     {
         private readonly IMessageQueue _messageQueue;
         private readonly NotificationHub _notificationHub;
-        private readonly ConnectionManager _connectionManager;
 
-        public NotificationService(IMessageQueue messageQueue,NotificationHub notificationHub,ConnectionManager connectionManager)
+        public NotificationService(IMessageQueue messageQueue,NotificationHub notificationHub)
         {
             this._messageQueue = messageQueue;
             this._notificationHub = notificationHub;
-            this._connectionManager = connectionManager;
 
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -39,23 +36,12 @@ namespace OptiBid.API.Producer
             {
                 if (message.MessageType == MessageType.Account)
                 {
-                    var selectedClients = _connectionManager.GetConnections("account");
-                    foreach (var selectedClient in selectedClients)
-                    {
-
-                       await _notificationHub.Clients.Client(selectedClient).SendCoreAsync("", 
-                            new[] { message },cancellationToken);
-                    }
+                    await _notificationHub.SendAccountUpdate(message);
                 }
                 else
                 {
-                    var selectedClients = _connectionManager.GetConnections("auction");
-                    foreach (var selectedClient in selectedClients)
-                    {
 
-                        await _notificationHub.Clients.Client(selectedClient).SendCoreAsync("",
-                            new[] { message }, cancellationToken);
-                    }
+                    await _notificationHub.SendAuctionUpdate(message);
                 }
 
             }

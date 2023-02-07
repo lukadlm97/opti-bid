@@ -5,6 +5,7 @@ using OptiBid.Microservices.Messaging.Receving.Configuration;
 using OptiBid.Microservices.Messaging.Receving.Factories;
 using OptiBid.Microservices.Messaging.Receving.MessageQueue;
 using OptiBid.Microservices.Messaging.Receving.Models;
+using OptiBid.Microservices.Shared.Messaging.DTOs;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -48,11 +49,8 @@ namespace OptiBid.API.Consumers
                         {
                             var body = ea.Body.ToArray();
                             var message = Encoding.UTF8.GetString(body);
-                            JsonSerializer.Deserialize<Message>()
-                            _messageQueue.Write(new NotificationMessage()
-                            {
-                                Content = message
-                            });
+                            
+                            _messageQueue.Write(JsonSerializer.Deserialize<Message>(message));
                         };
                         channel.BasicConsume(_queueNames.AccountsQueueName, true, consumer);
                     }

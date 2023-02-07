@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 
 namespace OptiBid.Microservices.Messaging.Receving.Models
 {
     public class ConnectionManager
     {
-        private readonly Dictionary<string, List<string>> _connections;
+        private readonly ConcurrentDictionary<string, List<string>> _connections;
 
         public ConnectionManager()
         {
-            _connections = new Dictionary<string, List<string>>();
+            _connections = new ConcurrentDictionary<string, List<string>>();
         }
 
         public IEnumerable<string> GetConnections(string topic)
@@ -22,9 +18,9 @@ namespace OptiBid.Microservices.Messaging.Receving.Models
 
         public void AddConnection(string connectionId,string topic)
         {
-            if (_connections[topic] == null)
+            if (!_connections.Keys.Contains(topic))
             {
-                _connections.Add(topic,new List<string>(){connectionId});
+                _connections.TryAdd(topic,new List<string>(){connectionId});
             }
             else
             {
@@ -34,7 +30,7 @@ namespace OptiBid.Microservices.Messaging.Receving.Models
 
         public void RemoveConnection(string connectionId, string topic)
         {
-            if (_connections.ContainsKey(topic))
+            if (_connections.ContainsKey(topic) && _connections[topic].Contains(connectionId))
             {
                 _connections[topic].Remove(connectionId);
             }

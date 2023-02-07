@@ -48,7 +48,7 @@ app.UseRouting();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<NotificationHub>("/signalr", options =>
+    endpoints.MapHub<NotificationHub>("/notification", options =>
     {
         options.Transports =
             HttpTransportType.WebSockets |
