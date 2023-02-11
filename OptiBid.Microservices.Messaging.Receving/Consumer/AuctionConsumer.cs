@@ -1,27 +1,27 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using OptiBid.Microservices.Messaging.Receving.Configuration;
+using OptiBid.Microservices.Messaging.Receving.MessageQueue;
+using OptiBid.Microservices.Shared.Messaging.DTOs;
+using RabbitMQ.Client.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using OptiBid.Microservices.Messaging.Receving.Configuration;
+using System.Threading.Tasks;
 using OptiBid.Microservices.Messaging.Receving.Factories;
-using OptiBid.Microservices.Messaging.Receving.MessageQueue;
-using OptiBid.Microservices.Messaging.Receving.Models;
-using OptiBid.Microservices.Shared.Messaging.DTOs;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 
 namespace OptiBid.Microservices.Messaging.Receving.Consumer
 {
-    public class AuthenticationConsumer:BackgroundService
+    public class AuctionConsumer : BackgroundService
     {
         private readonly IMqConnectionFactory _mqConnectionFactory;
         private readonly RabbitMqQueueSettings _queueNames;
         private readonly IMessageQueue _messageQueue;
 
-        public AuthenticationConsumer(IMqConnectionFactory mqConnectionFactory,
+        public AuctionConsumer(IMqConnectionFactory mqConnectionFactory,
             IOptions<RabbitMqQueueSettings> options,
             IMessageQueue messageQueue)
         {
@@ -41,7 +41,7 @@ namespace OptiBid.Microservices.Messaging.Receving.Consumer
 
                     var consumer = new AsyncEventingBasicConsumer(channel);
                     consumer.Received += Consumer_Received;
-                    channel.BasicConsume(_queueNames.AccountsQueueName, true, consumer);
+                    channel.BasicConsume(_queueNames.AuctionQueueName, true, consumer);
                 }
             }
         }

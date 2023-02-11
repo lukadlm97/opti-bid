@@ -35,5 +35,15 @@ namespace OptiBid.Microservices.Messaging.Receving.Models
                 _connections[topic].Remove(connectionId);
             }
         }
+
+        public bool IsSubscribed(string connectionId, string topic)
+        {
+            if (_connections.ContainsKey(topic) && _connections[topic].Contains(connectionId))
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

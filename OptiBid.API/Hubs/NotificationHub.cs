@@ -1,16 +1,21 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using OptiBid.Microservices.Messaging.Receving.MessageQueue;
 using OptiBid.Microservices.Messaging.Receving.Models;
 using OptiBid.Microservices.Shared.Messaging.DTOs;
+using OptiBid.Microservices.Shared.Messaging.Enumerations;
+using System.Threading;
 
 namespace OptiBid.API.Hubs
 {
     public class NotificationHub:Hub
     {
         private readonly ConnectionManager _connectionManager;
+        private readonly IMessageQueue _notificationMessageQueue;
 
-        public NotificationHub(ConnectionManager connectionManager)
+        public NotificationHub(ConnectionManager connectionManager,IMessageQueue notificationMessageQueue)
         {
             _connectionManager = connectionManager;
+            _notificationMessageQueue = notificationMessageQueue;
         }
 
         public async Task<string> Subscribe(string topic)
@@ -27,21 +32,39 @@ namespace OptiBid.API.Hubs
             return "You successfully unsubscribed from topic: " + topic;
         }
 
-        public async Task SendAccountUpdate(Message message)
+        public async IAsyncEnumerable<Message> SendAccountUpdate(CancellationToken cancellationToken)
         {
-           var connections =  _connectionManager.GetConnections("account");
-           foreach (var connection in connections)
-           {
-               await Clients.Client(connection).SendAsync("ReceiveAccountUpdate", message);
-           }
+            while (true)
+            {
+                await foreach (var message in (_notificationMessageQueue.ReadAll(cancellationToken)))
+                {
+                    if (message != null && message.MessageType==MessageType.Account && _connectionManager.IsSubscribed(Context.ConnectionId, "account"))
+                        yield return message;
+                }
+
+                if (cancellationToken.IsCancellationRequested)
+                {
+
+                    yield break;
+                }
+            }
         }
 
-        public async Task SendAuctionUpdate(Message message)
+        public async IAsyncEnumerable<Message> SendAuctionUpdate(CancellationToken cancellationToken)
         {
-            var connections = _connectionManager.GetConnections("auction");
-            foreach (var connection in connections)
+            while (true)
             {
-                await Clients.Client(connection).SendAsync("ReceiveAuctionUpdate", message);
+                await foreach (var message in (_notificationMessageQueue.ReadAll(cancellationToken)))
+                {
+                    if (message != null && message.MessageType != MessageType.Account && _connectionManager.IsSubscribed(Context.ConnectionId, "auction"))
+                        yield return message;
+                }
+
+                if (cancellationToken.IsCancellationRequested)
+                {
+
+                    yield break;
+                }
             }
         }
 

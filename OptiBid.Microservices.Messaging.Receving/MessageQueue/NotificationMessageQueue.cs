@@ -20,7 +20,7 @@ namespace OptiBid.Microservices.Messaging.Receving.MessageQueue
             _channelSettings = options.Value;
             _channel = Channel.CreateBounded<Message>(new BoundedChannelOptions(_channelSettings.Capacity)
             {
-                SingleReader = true,
+                SingleReader = false,
                 SingleWriter = false,
                 AllowSynchronousContinuations = false,
                 FullMode = BoundedChannelFullMode.Wait,

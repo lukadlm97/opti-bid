@@ -4,7 +4,6 @@ using OptiBid.API.Consumers;
 using OptiBid.API.Hubs;
 using OptiBid.API.Producer;
 using OptiBid.Microservices.Messaging.Receving.Configuration;
-using OptiBid.Microservices.Messaging.Receving.Consumer;
 using OptiBid.Microservices.Messaging.Receving.Factories;
 using OptiBid.Microservices.Messaging.Receving.MessageQueue;
 using OptiBid.Microservices.Messaging.Receving.Models;
@@ -22,8 +21,9 @@ builder.Services.AddSingleton<IMqConnectionFactory, RabbitMqConnectionFactory>()
 builder.Services.AddSingleton<NotificationHub>();
 builder.Services.AddSingleton<ConnectionManager>();
 
-builder.Services.AddHostedService<NotificationService>();
+//builder.Services.AddHostedService<NotificationService>();
 builder.Services.AddHostedService<AuctionConsumer>();
+builder.Services.AddHostedService<AccountConsumer>();
 builder.Services.AddSignalR()
     .AddHubOptions<NotificationHub>(options =>
     {

@@ -17,18 +17,24 @@ var connection = new HubConnectionBuilder()
 
 await connection.StartAsync();
 
-    /*
 Task.Run(async () =>
 {
-    await foreach (var message in (await  connection.StreamAsChannelAsync<Message>("")).ReadAllAsync())
+    await foreach (var message in (await  connection.StreamAsChannelAsync<Message>("SendAccountUpdate")).ReadAllAsync())
     {
         Console.WriteLine($"{JsonSerializer.Serialize(message, serializerOptions)}");
     }
-});*/
- var responseStr = string.Empty;
- var response =await connection.InvokeAsync<string>("Subscribe", "account");
+});
+ Task.Run(async () =>
+ {
+     await foreach (var message in (await connection.StreamAsChannelAsync<Message>("SendAuctionUpdate")).ReadAllAsync())
+     {
+         Console.WriteLine($"{JsonSerializer.Serialize(message, serializerOptions)}");
+     }
+ });
+var responseStr = string.Empty;
+var response =await connection.InvokeAsync<string>("Subscribe", "account");
 
- Console.WriteLine(response);
+Console.WriteLine(response);
 
 
 Console.ReadLine();

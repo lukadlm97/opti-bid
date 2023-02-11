@@ -36,12 +36,12 @@ namespace OptiBid.API.Producer
             {
                 if (message.MessageType == MessageType.Account)
                 {
-                    await _notificationHub.SendAccountUpdate(message);
+                 //   await _notificationHub.SendAccountUpdate(message);
                 }
                 else
                 {
 
-                    await _notificationHub.SendAuctionUpdate(message);
+                   // await _notificationHub.SendAuctionUpdate(message);
                 }
 
             }
