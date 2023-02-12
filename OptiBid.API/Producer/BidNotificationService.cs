@@ -5,12 +5,12 @@ using OptiBid.Microservices.Shared.Messaging.DTOs;
 
 namespace OptiBid.API.Producer
 {
-    public class AuctionNotificationService : BackgroundService
+    public class BidNotificationService : BackgroundService
     {
-        private readonly IAuctionMessageQueue _messageQueue;
+        private readonly IBidMessageQueue _messageQueue;
         private readonly NotificationHub _notificationHub;
 
-        public AuctionNotificationService(IAuctionMessageQueue messageQueue, NotificationHub notificationHub)
+        public BidNotificationService(IBidMessageQueue messageQueue, NotificationHub notificationHub)
         {
             this._messageQueue = messageQueue;
             this._notificationHub = notificationHub;
@@ -33,7 +33,7 @@ namespace OptiBid.API.Producer
         {
             if (_notificationHub.Clients != null)
             {
-                await _notificationHub.SendAuctionAssetsUpdate(message, cancellationToken);
+                await _notificationHub.SendAuctionBidUpdate(message, cancellationToken);
             }
         }
     }

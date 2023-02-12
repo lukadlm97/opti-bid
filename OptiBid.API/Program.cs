@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Connections;
-using OptiBid.API.Consumers;
 using OptiBid.API.Hubs;
 using OptiBid.API.Producer;
 using OptiBid.Microservices.Messaging.Receving.Configuration;
+using OptiBid.Microservices.Messaging.Receving.Consumers;
 using OptiBid.Microservices.Messaging.Receving.Factories;
 using OptiBid.Microservices.Messaging.Receving.MessageQueue;
 using OptiBid.Microservices.Messaging.Receving.Models;
@@ -18,12 +17,14 @@ builder.Services.Configure<RabbitMqQueueSettings>(builder.Configuration.GetSecti
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IAccountMessageQueue, AccountNotificationMessageQueue>();
 builder.Services.AddSingleton<IAuctionMessageQueue, AuctionNotificationMessageQueue>();
+builder.Services.AddSingleton<IBidMessageQueue, BidNotificationMessageQueue>();
 builder.Services.AddSingleton<IMqConnectionFactory, RabbitMqConnectionFactory>();
 builder.Services.AddSingleton<NotificationHub>();
 builder.Services.AddSingleton<ConnectionManager>();
 
 builder.Services.AddHostedService<AccountNotificationService>();
 builder.Services.AddHostedService<AuctionNotificationService>();
+builder.Services.AddHostedService<BidNotificationService>();
 builder.Services.AddHostedService<AuctionConsumer>();
 builder.Services.AddHostedService<AccountConsumer>();
 builder.Services.AddSignalR()

@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Messaging.Receving.Configuration;
-using OptiBid.Microservices.Messaging.Receving.Factories;
 using OptiBid.Microservices.Messaging.Receving.MessageQueue;
-using OptiBid.Microservices.Messaging.Receving.Models;
 using OptiBid.Microservices.Shared.Messaging.DTOs;
-using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Text;
+using System.Text.Json;
+using OptiBid.Microservices.Messaging.Receving.Factories;
+using RabbitMQ.Client;
 
-namespace OptiBid.Microservices.Messaging.Receving.Consumer
+namespace OptiBid.Microservices.Messaging.Receving.Consumers
 {
-    public class AuthenticationConsumer:BackgroundService
+    public class AccountConsumer : BackgroundService
     {
         private readonly IMqConnectionFactory _mqConnectionFactory;
         private readonly RabbitMqQueueSettings _queueNames;
         private readonly IAccountMessageQueue _messageQueue;
-        private readonly ILogger<AuthenticationConsumer> _logger;
+        private readonly ILogger<AccountConsumer> _logger;
 
-        public AuthenticationConsumer(IMqConnectionFactory mqConnectionFactory,
+        public AccountConsumer(IMqConnectionFactory mqConnectionFactory,
             IOptions<RabbitMqQueueSettings> options,
             IAccountMessageQueue messageQueue,
-            ILogger<AuthenticationConsumer> logger)
+            ILogger<AccountConsumer> logger)
         {
             _mqConnectionFactory = mqConnectionFactory;
             _queueNames = options.Value;
@@ -34,9 +30,8 @@ namespace OptiBid.Microservices.Messaging.Receving.Consumer
             _logger = logger;
 
         }
-        protected override  Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-
             stoppingToken.ThrowIfCancellationRequested();
             var connection = _mqConnectionFactory.GetConnection();
             var channel = connection.CreateModel();
@@ -52,7 +47,9 @@ namespace OptiBid.Microservices.Messaging.Receving.Consumer
                 channel.BasicAck(ea.DeliveryTag, false);
             };
             channel.BasicConsume(_queueNames.AccountsQueueName, false, consumer);
+
             return Task.CompletedTask;
+
         }
         private void HandleMessage(string content)
         {

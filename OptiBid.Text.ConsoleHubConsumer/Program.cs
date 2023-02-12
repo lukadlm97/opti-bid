@@ -39,20 +39,40 @@ Task.Run(async () =>
  {
      Console.WriteLine("Account service send: "+message);
  });
- connection.On<string>("ReceiveAuctionUpdate", (message) =>
+ connection.On<string,int>("ReceiveAuctionAssetUpdate", (message,id) =>
  {
-     Console.WriteLine("Auction service send: "+message);
+     if (id == -1)
+     {
+         Console.WriteLine("Auction service send error message: " + message);
+     }
+     else
+     {
+
+         Console.WriteLine("Auction service send: " + message + " \nDetails are available on page for asset:" + id);
+     }
+ });
+ connection.On<string, int,decimal>("ReceiveAuctionBidUpdate", (message, id,price) =>
+ {
+     if (id == -1)
+     {
+         Console.WriteLine("Auction service send error message: " + message);
+     }
+     else
+     {
+
+         Console.WriteLine("Auction service send bid message: " + message + " \nDetails for product with price "+price+" are available on page:" + id);
+     }
  });
 
+
 var response =await connection.InvokeAsync<string>("Subscribe", "account");
- var responseAuc = "default";
- if (new Random().Next() % 2 == 0)
- {
-     responseAuc = await connection.InvokeAsync<string>("Subscribe", "auction");
-}
+ var     responseAuc = await connection.InvokeAsync<string>("Subscribe", "auction");
+var   responseBid = await connection.InvokeAsync<string>("Subscribe", "bid");
+
 
 Console.WriteLine(response);
 Console.WriteLine(responseAuc);
+Console.WriteLine(responseBid);
 
 
 Console.ReadLine();

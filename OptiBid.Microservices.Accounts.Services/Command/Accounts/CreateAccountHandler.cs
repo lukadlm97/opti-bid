@@ -3,6 +3,7 @@ using AutoMapper;
 using OptiBid.Microservices.Accounts.Services.UnitOfWork;
 using OptiBid.Microservices.Accounts.Services.Utility;
 using OptiBid.Microservices.Shared.Messaging.DTOs;
+using OptiBid.Microservices.Shared.Messaging.Enumerations;
 using User = OptiBid.Microservices.Accounts.Domain.DTOs.User;
 
 namespace OptiBid.Microservices.Accounts.Services.Command.Accounts
@@ -28,7 +29,8 @@ namespace OptiBid.Microservices.Accounts.Services.Command.Accounts
             {
                 Name = request.User.FirstName + " " + request.User.LastName,
                 RoleName = request.User.UserRole.Name,
-                UserName = request.User.Username
+                UserName = request.User.Username,
+                AccountMessageType = AccountMessageType.Registration
             }));
 
             return _mapper.Map<Domain.DTOs.User>(request.User);

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.SignalR;
 using OptiBid.Microservices.Messaging.Receving.Models;
+using OptiBid.Microservices.Messaging.Receving.Utilities;
 using OptiBid.Microservices.Shared.Messaging.DTOs;
 
 namespace OptiBid.API.Hubs
@@ -32,17 +33,26 @@ namespace OptiBid.API.Hubs
         {
             foreach (var connection in _connectionManager.GetConnections("account"))
             {
-                var json = JsonSerializer.Serialize(message);
-                await Clients.Client(connection).SendAsync("ReceiveAccountUpdate", json, cancellationToken);
+                var messageForClient  = message.GetAccountNotificationMessage();
+                await Clients.Client(connection).SendAsync("ReceiveAccountUpdate", messageForClient, cancellationToken);
             }
         }
 
-        public async Task SendAuctionUpdate(Message message, CancellationToken cancellationToken)
+        public async Task SendAuctionAssetsUpdate(Message message, CancellationToken cancellationToken)
         {
             foreach (var connection in _connectionManager.GetConnections("auction"))
             {
-                var json = JsonSerializer.Serialize(message);
-                await Clients.Client(connection).SendAsync("ReceiveAuctionUpdate",  json, cancellationToken);
+                var messageForClient = message.GetAuctionAssetsNotificationMessage();
+                await Clients.Client(connection).SendAsync("ReceiveAuctionAssetUpdate",  messageForClient.Item1,messageForClient.Item2, cancellationToken);
+            }
+        }
+
+        public async Task SendAuctionBidUpdate(Message message, CancellationToken cancellationToken)
+        {
+            foreach (var connection in _connectionManager.GetConnections("bid"))
+            {
+                var messageForClient = message.GetAssetsBidNotificationMessage();
+                await Clients.Client(connection).SendAsync("ReceiveAuctionBidUpdate", messageForClient.Item1, messageForClient.Item2,messageForClient.Item3, cancellationToken);
             }
         }
 

@@ -25,13 +25,12 @@ namespace OptiBid.Microservices.Auction.Messaging.Sender.Sender
     
                 using (var channel = _connectionFactory.GetConnection().CreateModel())
                 {
-                //channel.QueueDeclare(queue: _rabbitMqConfigs.QueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
-                var transferMessage = new Message()
-                {
-                    BidMessage = message,
-                    MessageType = MessageType.Bid
-                };
-                var json = JsonSerializer.Serialize(transferMessage);
+                    var transferMessage = new Message()
+                    {
+                        BidMessage = message,
+                        MessageType = MessageType.Bid
+                    };
+                    var json = JsonSerializer.Serialize(transferMessage);
                     var body = Encoding.UTF8.GetBytes(json);
 
                     channel.BasicPublish(exchange: "", routingKey: _mqSettings.QueueName, basicProperties: null, body: body);
