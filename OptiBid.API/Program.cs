@@ -16,12 +16,14 @@ builder.Services.Configure<ChannelSettings>(builder.Configuration.GetSection("Ch
 builder.Services.Configure<RabbitMqQueueSettings>(builder.Configuration.GetSection("RabbitQueueName"));
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<IMessageQueue, NotificationMessageQueue>();
+builder.Services.AddSingleton<IAccountMessageQueue, AccountNotificationMessageQueue>();
+builder.Services.AddSingleton<IAuctionMessageQueue, AuctionNotificationMessageQueue>();
 builder.Services.AddSingleton<IMqConnectionFactory, RabbitMqConnectionFactory>();
 builder.Services.AddSingleton<NotificationHub>();
 builder.Services.AddSingleton<ConnectionManager>();
 
-//builder.Services.AddHostedService<NotificationService>();
+builder.Services.AddHostedService<AccountNotificationService>();
+builder.Services.AddHostedService<AuctionNotificationService>();
 builder.Services.AddHostedService<AuctionConsumer>();
 builder.Services.AddHostedService<AccountConsumer>();
 builder.Services.AddSignalR()

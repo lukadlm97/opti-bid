@@ -1,5 +1,4 @@
-﻿
-using OptiBid.Microservices.Shared.Messaging.DTOs;
+﻿using OptiBid.Microservices.Shared.Messaging.DTOs;
 
 namespace OptiBid.Microservices.Messaging.Receving.MessageQueue
 {
@@ -12,6 +11,5 @@ namespace OptiBid.Microservices.Messaging.Receving.MessageQueue
         IAsyncEnumerable<Message> ReadAll(CancellationToken cancellationToken = default);
 
         IObservable<Message> GetBaseEntities(CancellationToken cancellationToken = default);
-
     }
 }

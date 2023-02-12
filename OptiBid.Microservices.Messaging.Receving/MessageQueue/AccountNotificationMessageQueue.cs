@@ -1,21 +1,20 @@
-﻿using System.Threading;
+﻿
 using System.Threading.Channels;
 using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Messaging.Receving.Configuration;
-using OptiBid.Microservices.Messaging.Receving.Models;
 using OptiBid.Microservices.Messaging.Receving.Utilities;
 using OptiBid.Microservices.Shared.Messaging.DTOs;
 
 namespace OptiBid.Microservices.Messaging.Receving.MessageQueue
 {
-    public class NotificationMessageQueue:IMessageQueue
+    public class AccountNotificationMessageQueue:IAccountMessageQueue
     {
         private readonly ChannelSettings _channelSettings;
         private readonly Channel<Message> _channel;
         private IObservable<Message> _observable;
 
 
-        public NotificationMessageQueue(IOptions<ChannelSettings> options)
+        public AccountNotificationMessageQueue(IOptions<ChannelSettings> options)
         {
             _channelSettings = options.Value;
             _channel = Channel.CreateBounded<Message>(new BoundedChannelOptions(_channelSettings.Capacity)

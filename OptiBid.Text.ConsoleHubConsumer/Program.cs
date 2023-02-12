@@ -17,6 +17,7 @@ var connection = new HubConnectionBuilder()
 
 await connection.StartAsync();
 
+ /*
 Task.Run(async () =>
 {
     await foreach (var message in (await  connection.StreamAsChannelAsync<Message>("SendAccountUpdate")).ReadAllAsync())
@@ -30,11 +31,28 @@ Task.Run(async () =>
      {
          Console.WriteLine($"{JsonSerializer.Serialize(message, serializerOptions)}");
      }
+
  });
-var responseStr = string.Empty;
+ */
+
+ connection.On<string>("ReceiveAccountUpdate", (message) =>
+ {
+     Console.WriteLine("Account service send: "+message);
+ });
+ connection.On<string>("ReceiveAuctionUpdate", (message) =>
+ {
+     Console.WriteLine("Auction service send: "+message);
+ });
+
 var response =await connection.InvokeAsync<string>("Subscribe", "account");
+ var responseAuc = "default";
+ if (new Random().Next() % 2 == 0)
+ {
+     responseAuc = await connection.InvokeAsync<string>("Subscribe", "auction");
+}
 
 Console.WriteLine(response);
+Console.WriteLine(responseAuc);
 
 
 Console.ReadLine();

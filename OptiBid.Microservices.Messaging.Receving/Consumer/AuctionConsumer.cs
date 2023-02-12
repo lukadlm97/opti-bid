@@ -12,6 +12,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using OptiBid.Microservices.Messaging.Receving.Factories;
 using RabbitMQ.Client;
+using System.Threading.Channels;
+using Microsoft.Extensions.Logging;
 
 namespace OptiBid.Microservices.Messaging.Receving.Consumer
 {
@@ -19,38 +21,47 @@ namespace OptiBid.Microservices.Messaging.Receving.Consumer
     {
         private readonly IMqConnectionFactory _mqConnectionFactory;
         private readonly RabbitMqQueueSettings _queueNames;
-        private readonly IMessageQueue _messageQueue;
+        private readonly IAuctionMessageQueue _messageQueue;
+        private readonly ILogger<AuctionConsumer> _logger;
 
         public AuctionConsumer(IMqConnectionFactory mqConnectionFactory,
             IOptions<RabbitMqQueueSettings> options,
-            IMessageQueue messageQueue)
+            IAuctionMessageQueue messageQueue,
+            ILogger<AuctionConsumer> logger)
         {
             _mqConnectionFactory = mqConnectionFactory;
             _queueNames = options.Value;
             _messageQueue = messageQueue;
+            _logger = logger;
 
         }
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
 
-            while (!stoppingToken.IsCancellationRequested)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            stoppingToken.ThrowIfCancellationRequested();
+            var connection = _mqConnectionFactory.GetConnection();
+            var channel = connection.CreateModel();
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += (ch, ea) =>
             {
-                var connection = _mqConnectionFactory.GetConnection();
-                using (var channel = connection.CreateModel())
-                {
+                // received message
+                var body = ea.Body.ToArray();
+                var content = System.Text.Encoding.UTF8.GetString(body);
 
-                    var consumer = new AsyncEventingBasicConsumer(channel);
-                    consumer.Received += Consumer_Received;
-                    channel.BasicConsume(_queueNames.AuctionQueueName, true, consumer);
-                }
-            }
+                // handle the received message  
+                HandleMessage(content);
+                channel.BasicAck(ea.DeliveryTag, false);
+            };
+            channel.BasicConsume(_queueNames.AuctionQueueName, false, consumer);
+
+            return Task.CompletedTask;
+
         }
 
-        async Task Consumer_Received(object sender, BasicDeliverEventArgs args)
+        private void HandleMessage(string content)
         {
-            var body = args.Body.ToArray();
-            var message = Encoding.UTF8.GetString(body);
-            await _messageQueue.WriteAsync(JsonSerializer.Deserialize<Message>(message), default);
+            _logger.LogInformation($"consumer received {content}");
+            _messageQueue.Write(JsonSerializer.Deserialize<Message>(content));
         }
     }
 }

@@ -1,21 +1,17 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using OptiBid.Microservices.Messaging.Receving.MessageQueue;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.SignalR;
 using OptiBid.Microservices.Messaging.Receving.Models;
 using OptiBid.Microservices.Shared.Messaging.DTOs;
-using OptiBid.Microservices.Shared.Messaging.Enumerations;
-using System.Threading;
 
 namespace OptiBid.API.Hubs
 {
     public class NotificationHub:Hub
     {
         private readonly ConnectionManager _connectionManager;
-        private readonly IMessageQueue _notificationMessageQueue;
 
-        public NotificationHub(ConnectionManager connectionManager,IMessageQueue notificationMessageQueue)
+        public NotificationHub(ConnectionManager connectionManager)
         {
             _connectionManager = connectionManager;
-            _notificationMessageQueue = notificationMessageQueue;
         }
 
         public async Task<string> Subscribe(string topic)
@@ -32,39 +28,21 @@ namespace OptiBid.API.Hubs
             return "You successfully unsubscribed from topic: " + topic;
         }
 
-        public async IAsyncEnumerable<Message> SendAccountUpdate(CancellationToken cancellationToken)
+        public async Task SendAccountUpdate(Message message,CancellationToken cancellationToken)
         {
-            while (true)
+            foreach (var connection in _connectionManager.GetConnections("account"))
             {
-                await foreach (var message in (_notificationMessageQueue.ReadAll(cancellationToken)))
-                {
-                    if (message != null && message.MessageType==MessageType.Account && _connectionManager.IsSubscribed(Context.ConnectionId, "account"))
-                        yield return message;
-                }
-
-                if (cancellationToken.IsCancellationRequested)
-                {
-
-                    yield break;
-                }
+                var json = JsonSerializer.Serialize(message);
+                await Clients.Client(connection).SendAsync("ReceiveAccountUpdate", json, cancellationToken);
             }
         }
 
-        public async IAsyncEnumerable<Message> SendAuctionUpdate(CancellationToken cancellationToken)
+        public async Task SendAuctionUpdate(Message message, CancellationToken cancellationToken)
         {
-            while (true)
+            foreach (var connection in _connectionManager.GetConnections("auction"))
             {
-                await foreach (var message in (_notificationMessageQueue.ReadAll(cancellationToken)))
-                {
-                    if (message != null && message.MessageType != MessageType.Account && _connectionManager.IsSubscribed(Context.ConnectionId, "auction"))
-                        yield return message;
-                }
-
-                if (cancellationToken.IsCancellationRequested)
-                {
-
-                    yield break;
-                }
+                var json = JsonSerializer.Serialize(message);
+                await Clients.Client(connection).SendAsync("ReceiveAuctionUpdate",  json, cancellationToken);
             }
         }
 
