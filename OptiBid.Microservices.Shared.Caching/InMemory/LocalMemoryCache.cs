@@ -25,10 +25,9 @@ namespace OptiBid.Microservices.Shared.Caching.InMemory
             try
             {
                 await _cacheSignal.WaitAsync();
-
-                var completeKey = _hybridCacheSettings.ApplicationName + key;
+                
                 var memoryCacheEntryOptions = DeterminateCacheEntryOptions();
-                _memoryCache.Set(completeKey, value, memoryCacheEntryOptions);
+                _memoryCache.Set(key, value, memoryCacheEntryOptions);
             }
             catch (Exception ex)
             {
@@ -45,9 +44,8 @@ namespace OptiBid.Microservices.Shared.Caching.InMemory
             try
             {
                 await _cacheSignal.WaitAsync();
-
-                var completeKey = _hybridCacheSettings.ApplicationName + key;
-                return _memoryCache.Get<T>(completeKey);
+                
+                return _memoryCache.Get<T>(key);
             }
             catch (Exception ex)
             {
@@ -61,14 +59,13 @@ namespace OptiBid.Microservices.Shared.Caching.InMemory
             return null;
         }
 
-        public async Task Invalid(string key, CancellationToken cancellationToken = default)
+        public async Task Invalidate(string key, CancellationToken cancellationToken = default)
         {
             try
             {
                 await _cacheSignal.WaitAsync();
-
-                var completeKey = _hybridCacheSettings.ApplicationName + key;
-                _memoryCache.Remove(completeKey);
+                
+                _memoryCache.Remove(key);
             }
             catch (Exception ex)
             {
@@ -83,16 +80,16 @@ namespace OptiBid.Microservices.Shared.Caching.InMemory
 
         MemoryCacheEntryOptions DeterminateCacheEntryOptions()
         {
-            if (_hybridCacheSettings.IsSlidingExpiration)
+            if (_hybridCacheSettings.LocalCacheSettings.IsSlidingExpiration)
             {
                 return new MemoryCacheEntryOptions()
                 {
-                    SlidingExpiration = _hybridCacheSettings.LocalCacheTime
+                    SlidingExpiration = _hybridCacheSettings.LocalCacheSettings.LocalCacheTime
                 };
             }
             return new MemoryCacheEntryOptions()
             {
-                AbsoluteExpirationRelativeToNow = _hybridCacheSettings.LocalCacheTime
+                AbsoluteExpirationRelativeToNow = _hybridCacheSettings.LocalCacheSettings.LocalCacheTime
             };
         }
     }
