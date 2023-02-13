@@ -71,5 +71,47 @@ namespace OptiBid.Microservices.Shared.Caching.Distributed
                 throw;
             }
         }
+
+        public async Task Set(string key, List<T> values, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var db = _distributedCacheConnectionFactory.GetConnection();
+                var json = JsonSerializer.Serialize(values);
+                if (await db.StringSetAsync(key, json, _hybridCacheSettings.DistributedCacheSettings.TTL))
+                {
+                    return;
+                }
+                else
+                {
+                    throw new InvalidOperationException();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task<List<T>> GetCollection(string key, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var db = _distributedCacheConnectionFactory.GetConnection();
+                var item = await db.StringGetAsync(key);
+                if (!string.IsNullOrWhiteSpace(item))
+                {
+                    return JsonSerializer.Deserialize<List<T>>(item);
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Shared.Caching.Configuration;
@@ -73,19 +69,37 @@ namespace OptiBid.Microservices.Shared.Caching.Hybrid
             }
         }
 
-        public Task Set(string key, List<T> values, CancellationToken cancellationToken = default)
+        public async Task Set(string key, List<T> values, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _localMemoryCache.Set(key, values, cancellationToken);
+                await _distributedCache.Set(key, values, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
         }
 
-        public Task<T> GetCollection(string key, CancellationToken cancellationToken = default)
+        public async Task<List<T>> GetCollection(string key, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                var objFromCache = await _localMemoryCache.GetCollection(key, cancellationToken);
+                if (objFromCache != null)
+                    return objFromCache;
 
-        public Task InvalidateCollection(string key, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
+                objFromCache = await _distributedCache.GetCollection(key, cancellationToken);
+                return objFromCache;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return null;
         }
+        
     }
 }

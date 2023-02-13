@@ -10,9 +10,8 @@ namespace OptiBid.Microservices.Shared.Caching.Utilities
 {
     public static class CacheInitializationExtensions
     {
-        public static void AddHybridCaching(this IServiceCollection serviceProvider, HostBuilderContext hostingContext)
+        public static void AddHybridCaching(this IServiceCollection serviceProvider)
         {
-            serviceProvider.Configure<HybridCacheSettings>(hostingContext.Configuration.GetSection(nameof(HybridCacheSettings)));
             serviceProvider.AddMemoryCache();
             serviceProvider.AddLogging();
             serviceProvider.AddSingleton(typeof(IDistributedCacheConnectionFactory), typeof(RedisConnectionFactory));

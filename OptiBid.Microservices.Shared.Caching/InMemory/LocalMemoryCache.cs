@@ -78,6 +78,45 @@ namespace OptiBid.Microservices.Shared.Caching.InMemory
             
         }
 
+        public async Task Set(string key, List<T> values, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await _cacheSignal.WaitAsync();
+
+                var memoryCacheEntryOptions = DeterminateCacheEntryOptions();
+                _memoryCache.Set(key, values, memoryCacheEntryOptions);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            finally
+            {
+                _cacheSignal.Release();
+            }
+        }
+
+        public async Task<List<T>> GetCollection(string key, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await _cacheSignal.WaitAsync();
+
+                return _memoryCache.Get<List<T>>(key);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            finally
+            {
+                _cacheSignal.Release();
+            }
+
+            return null;
+        }
+
         MemoryCacheEntryOptions DeterminateCacheEntryOptions()
         {
             if (_hybridCacheSettings.LocalCacheSettings.IsSlidingExpiration)

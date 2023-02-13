@@ -1,11 +1,17 @@
 using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.Extensions.DependencyInjection;
 using OptiBid.API.Hubs;
 using OptiBid.API.Producer;
+using OptiBid.Microservices.Contracts.Configuration;
 using OptiBid.Microservices.Messaging.Receving.Configuration;
 using OptiBid.Microservices.Messaging.Receving.Consumers;
 using OptiBid.Microservices.Messaging.Receving.Factories;
 using OptiBid.Microservices.Messaging.Receving.MessageQueue;
 using OptiBid.Microservices.Messaging.Receving.Models;
+using OptiBid.Microservices.Services.Utilities;
+using OptiBid.Microservices.Shared.Caching.Configuration;
+using OptiBid.Microservices.Shared.Caching.Utilities;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +19,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("RabbitMq"));
 builder.Services.Configure<ChannelSettings>(builder.Configuration.GetSection("ChannelSettings"));
 builder.Services.Configure<RabbitMqQueueSettings>(builder.Configuration.GetSection("RabbitQueueName"));
+builder.Services.Configure<ExternalGrpcSettings>(builder.Configuration.GetSection("ExternalGrpcSettings"));
+builder.Services.Configure<HybridCacheSettings>(builder.Configuration.GetSection(nameof(HybridCacheSettings)));
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IAccountMessageQueue, AccountNotificationMessageQueue>();
@@ -21,6 +29,8 @@ builder.Services.AddSingleton<IBidMessageQueue, BidNotificationMessageQueue>();
 builder.Services.AddSingleton<IMqConnectionFactory, RabbitMqConnectionFactory>();
 builder.Services.AddSingleton<NotificationHub>();
 builder.Services.AddSingleton<ConnectionManager>();
+builder.Services.AddAccountApplication();
+builder.Services.AddHybridCaching();
 
 builder.Services.AddHostedService<AccountNotificationService>();
 builder.Services.AddHostedService<AuctionNotificationService>();
