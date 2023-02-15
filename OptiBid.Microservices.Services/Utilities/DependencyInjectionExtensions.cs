@@ -14,6 +14,7 @@ namespace OptiBid.Microservices.Services.Utilities
             serviceCollection.AddScoped(typeof(IAccountGrpcFactory), typeof(AccountGrpcFactory));
             serviceCollection.AddScoped(typeof(IAccountEnumerationGrpcService), typeof(AccountEnumerationGrpcService));
             serviceCollection.AddScoped(typeof(IAccountDashboardService), typeof(AccountDashboardService));
+            serviceCollection.AddScoped(typeof(IFireForget<>), typeof(FireForget<>));
             
         }
     }
