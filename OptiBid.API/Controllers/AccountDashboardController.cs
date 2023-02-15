@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OptiBid.API.Utilities;
 using OptiBid.Microservices.Contracts.Domain.Output;
 using OptiBid.Microservices.Contracts.Services;
 
@@ -38,16 +39,10 @@ namespace OptiBid.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("countries")]
-        public async Task<IActionResult> GetCountries(CancellationToken cancellationToken=default)
+        public async Task<ActionResult<IEnumerable<EnumItem>?>> GetCountries(CancellationToken cancellationToken=default)
         {
-            var operationResult = await _accountDashboardService.GetCountries(default);
-
-            return operationResult.Status switch
-            {
-                OperationResultStatus.Success => Ok(operationResult.Collection),
-                OperationResultStatus.NotFound => NotFound(operationResult.ErrorMessage),
-                OperationResultStatus.BadRequest or _=> BadRequest(operationResult.ErrorMessage)
-            };
+            return await _accountDashboardService.GetCountries(default)
+                .ToCollectionActionResult();
         }
         /// <summary>
         /// Returns all professions supported at system.
@@ -69,16 +64,10 @@ namespace OptiBid.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("professions")]
-        public async Task<IActionResult> GetProfessions()
+        public async Task<ActionResult<IEnumerable<EnumItem>?>> GetProfessions()
         {
-            var operationResult = await _accountDashboardService.GetProfessions(default);
-
-            return operationResult.Status switch
-            {
-                OperationResultStatus.Success => Ok(operationResult.Collection),
-                OperationResultStatus.NotFound => NotFound(operationResult.ErrorMessage),
-                OperationResultStatus.BadRequest or _ => BadRequest(operationResult.ErrorMessage)
-            };
+            return await _accountDashboardService.GetProfessions(default)
+                .ToCollectionActionResult();
         }
         /// <summary>
         /// Returns all contact types supported at system.
@@ -100,16 +89,10 @@ namespace OptiBid.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("contactTypes")]
-        public async Task<IActionResult> GetContentTypes()
+        public async Task<ActionResult<IEnumerable<EnumItem>?>> GetContentTypes()
         {
-            var operationResult = await _accountDashboardService.GetContactTypes(default);
-
-            return operationResult.Status switch
-            {
-                OperationResultStatus.Success => Ok(operationResult.Collection),
-                OperationResultStatus.NotFound => NotFound(operationResult.ErrorMessage),
-                OperationResultStatus.BadRequest or _ => BadRequest(operationResult.ErrorMessage)
-            };
+            return await _accountDashboardService.GetContactTypes(default)
+                .ToCollectionActionResult();
         }
         /// <summary>
         /// Returns all user roles supported at system.
@@ -131,16 +114,10 @@ namespace OptiBid.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("userRoles")]
-        public async Task<IActionResult> GetUserRoles()
+        public async Task<ActionResult<IEnumerable<EnumItem>?>> GetUserRoles()
         {
-            var operationResult = await _accountDashboardService.GetUserRoles(default);
-
-            return operationResult.Status switch
-            {
-                OperationResultStatus.Success => Ok(operationResult.Collection),
-                OperationResultStatus.NotFound => NotFound(operationResult.ErrorMessage),
-                OperationResultStatus.BadRequest or _ => BadRequest(operationResult.ErrorMessage)
-            };
+            return await _accountDashboardService.GetUserRoles(default)
+                .ToCollectionActionResult();
         }
     }
 }
