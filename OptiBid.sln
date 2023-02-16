@@ -63,9 +63,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Microservices.Share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Console.Caching", "OptiBid.Console.Caching\OptiBid.Console.Caching.csproj", "{CD7AEFA9-AB38-4FB6-9261-A2EF35F8193F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Services", "OptiBid.Microservices.Services\OptiBid.Microservices.Services.csproj", "{F39AAF2C-F087-43D5-8689-F2C86C9DD81F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Microservices.Services", "OptiBid.Microservices.Services\OptiBid.Microservices.Services.csproj", "{F39AAF2C-F087-43D5-8689-F2C86C9DD81F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Microservices.Contracts", "OptiBid.Microservices.Contracts\OptiBid.Microservices.Contracts.csproj", "{1DFC824B-D6EF-4E81-86FF-9CECC936451A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Microservices.Contracts", "OptiBid.Microservices.Contracts\OptiBid.Microservices.Contracts.csproj", "{1DFC824B-D6EF-4E81-86FF-9CECC936451A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Console.Otp-Net", "OptiBid.Console.Otp-Net\OptiBid.Console.Otp-Net.csproj", "{451FFD1E-D1AD-4BF9-B685-377C5CE7820E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,6 +159,10 @@ Global
 		{1DFC824B-D6EF-4E81-86FF-9CECC936451A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DFC824B-D6EF-4E81-86FF-9CECC936451A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DFC824B-D6EF-4E81-86FF-9CECC936451A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{451FFD1E-D1AD-4BF9-B685-377C5CE7820E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{451FFD1E-D1AD-4BF9-B685-377C5CE7820E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{451FFD1E-D1AD-4BF9-B685-377C5CE7820E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{451FFD1E-D1AD-4BF9-B685-377C5CE7820E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,6 +198,7 @@ Global
 		{CD7AEFA9-AB38-4FB6-9261-A2EF35F8193F} = {7BF17E43-5E61-419D-BB75-BAA994F93E76}
 		{F39AAF2C-F087-43D5-8689-F2C86C9DD81F} = {55331A8C-CF24-4B32-976A-D4198EF6FADC}
 		{1DFC824B-D6EF-4E81-86FF-9CECC936451A} = {55331A8C-CF24-4B32-976A-D4198EF6FADC}
+		{451FFD1E-D1AD-4BF9-B685-377C5CE7820E} = {7BF17E43-5E61-419D-BB75-BAA994F93E76}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D9A83D5A-DFAA-4560-A9D2-4BF12E170CEA}
