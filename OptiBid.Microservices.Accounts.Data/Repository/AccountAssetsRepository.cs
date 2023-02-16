@@ -29,12 +29,22 @@ namespace OptiBid.Microservices.Accounts.Data.Repository
             await this.accountsContext.UserTokens.AddAsync(userToken, cancellationToken);
         }
 
+        public async Task InvalidateTokens(int userId, CancellationToken cancellationToken = default)
+        {
+            var tokens = accountsContext.UserTokens.Where(x => x.UserID == userId);
+            foreach (var userToken in tokens)
+            {
+                userToken.IsValid = false;
+            }
+            this.accountsContext.UpdateRange(tokens);
+        }
+
         public async Task<(string, string)> Get(int userId, CancellationToken cancellationToken = default)
         {
             var userToken =
-                await accountsContext.UserTokens.LastOrDefaultAsync(x => x.UserID == userId, cancellationToken);
+                await accountsContext.UserTokens.OrderBy(x=>x.ID).LastOrDefaultAsync(x => x.UserID == userId, cancellationToken);
             var userTwoFaAsset =
-                await accountsContext.UserTwoFaAssets.LastOrDefaultAsync(x => x.UserID == userId, cancellationToken);
+                await accountsContext.UserTwoFaAssets.OrderBy(x => x.ID).LastOrDefaultAsync(x => x.UserID == userId, cancellationToken);
 
 
             return (userToken.RefreshToken, userTwoFaAsset.Source);

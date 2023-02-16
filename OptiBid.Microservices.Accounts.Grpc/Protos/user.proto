@@ -18,6 +18,7 @@ service User {
   rpc UpdateProfile(UpdateRequest)returns(RegisterReplay);
   rpc GetUserAssets(UserRequest)returns(AssetsReply);
   rpc ConfirmedFirstLogIn(UserRequest)returns(OperationReply);
+  rpc RefreshToken(RefreshTokenRequest) returns(RefreshTokenReply);
 }
 
 // The request message containing the user's name.
@@ -68,6 +69,7 @@ message SingleUserDetails{
      int32 countryId=5;
      repeated SingleSkill Skills=6;
      repeated SingleContact Contacts=7;
+     bool firstLogIn=8;
 }
 
 enum OperationCompletionStatus{
@@ -125,4 +127,13 @@ message AssetsReply{
 message OperationReply{
     
  OperationCompletionStatus status=1;
+}
+
+message RefreshTokenRequest{
+    string username=1;
+    string refreshToken=2;
+}
+message RefreshTokenReply{
+    OperationCompletionStatus status=1;
+    string generatedRefreshToken=2;
 }

@@ -27,6 +27,9 @@
     <Protobuf Include="..\OptiBid.Microservices.Accounts.Grpc\Protos\dashboard.proto" GrpcServices="Client">
       <Link>Protos\dashboard.proto</Link>
     </Protobuf>
+    <Protobuf Include="..\OptiBid.Microservices.Accounts.Grpc\Protos\user.proto" GrpcServices="Client">
+      <Link>Protos\user.proto</Link>
+    </Protobuf>
     <Protobuf Include="..\OptiBid.Microservices.Auction.Grpc\Protos\categories.proto" GrpcServices="Client">
       <Link>Protos\categories.proto</Link>
     </Protobuf>

@@ -16,6 +16,9 @@ namespace OptiBid.Microservices.Services.Utilities
             serviceCollection.AddScoped(typeof(IAccountEnumerationGrpcService), typeof(AccountEnumerationGrpcService));
             serviceCollection.AddScoped(typeof(ICategoryEnumerationGrpcService), typeof(CategoryEnumerationGrpcService));
             serviceCollection.AddScoped(typeof(ICategoryDashboardService), typeof(CategoryService));
+            serviceCollection.AddScoped(typeof(IAccountGrpcService), typeof(UserGrpcService));
+            serviceCollection.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
+
             serviceCollection.AddScoped(typeof(IFireForget<>), typeof(FireForget<>));
             
         }

@@ -11,6 +11,7 @@ namespace OptiBid.Microservices.Accounts.Data.Repository
     {
         Task AddTwoFAKey(UserTwoFAAssets userTwoFaAssets,CancellationToken cancellationToken=default);
         Task AddRefreshToken(UserToken userToken, CancellationToken cancellationToken=default);
+        Task InvalidateTokens(int userId, CancellationToken cancellationToken = default);
         Task<(string,string)> Get(int userId,CancellationToken cancellationToken=default);
     }
 }

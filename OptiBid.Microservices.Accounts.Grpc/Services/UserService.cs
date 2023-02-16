@@ -18,9 +18,34 @@ namespace OptiBid.Microservices.Accounts.Grpc.Services
             _mapper = mapper;
         }
 
+        public override async Task<RefreshTokenReply> RefreshToken(RefreshTokenRequest request, ServerCallContext context)
+        {
+            (bool, string) reply = await _mediator.Send(new RefreshTokenCommand()
+            {
+                RefreshToken = request.RefreshToken,
+                Username = request.Username
+            });
+            if (reply.Item1)
+            {
+                return new RefreshTokenReply()
+                {
+                    Status = OperationCompletionStatus.Success,
+                    GeneratedRefreshToken = reply.Item2
+                };
+            }
+
+            return new RefreshTokenReply()
+            {
+                Status = OperationCompletionStatus.BadRequest
+            };
+        }
+
         public override async Task<OperationReply> ConfirmedFirstLogIn(UserRequest request, ServerCallContext context)
         {
-            var reply = await _mediator.Send(new CompletedFirstLogInAccountCommand(), context.CancellationToken);
+            var reply = await _mediator.Send(new CompletedFirstLogInAccountCommand()
+            {
+                Username = request.Username
+            }, context.CancellationToken);
             if (reply)
             {
                 return new OperationReply()
