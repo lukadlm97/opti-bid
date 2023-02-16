@@ -18,6 +18,22 @@ namespace OptiBid.Microservices.Accounts.Grpc.Services
             _mapper = mapper;
         }
 
+        public override async Task<OperationReply> ConfirmedFirstLogIn(UserRequest request, ServerCallContext context)
+        {
+            var reply = await _mediator.Send(new CompletedFirstLogInAccountCommand(), context.CancellationToken);
+            if (reply)
+            {
+                return new OperationReply()
+                {
+                    Status = OperationCompletionStatus.Success
+                };
+            }
+            return new OperationReply()
+            {
+                Status = OperationCompletionStatus.BadRequest
+            };
+        }
+
         public override async Task<UsersReplay> Get(UsersPagingRequest request, ServerCallContext context)
         {
             var users = _mapper.Map<IEnumerable<Domain.DTOs.User>, IEnumerable<UserServiceDefinition.SingleUser>>(
@@ -75,6 +91,33 @@ namespace OptiBid.Microservices.Accounts.Grpc.Services
                 };
         }
 
+        public override async Task<AssetsReply> GetUserAssets(UserRequest request, ServerCallContext context)
+        {
+            var result = await _mediator.Send(
+                new GetAccountAssetsCommand()
+                {
+                    Username = request.Username
+                }, context.CancellationToken);
+
+            if (result == (null,null))
+            {
+                return new AssetsReply()
+                {
+                    Status = OperationCompletionStatus.BadRequest
+                };
+            }
+
+            return new
+                AssetsReply()
+                {
+                    Status = OperationCompletionStatus.Success,
+                    Response = new AssetsResponse()
+                    {
+                        Token = result.Item1,
+                        TwoFa = result.Item2
+                    }
+                };
+        }
 
         public override async Task<UserDetailsReplay> SignIn(UserRequest request, ServerCallContext context)
         {

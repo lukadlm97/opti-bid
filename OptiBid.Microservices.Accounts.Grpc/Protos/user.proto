@@ -16,7 +16,8 @@ service User {
   rpc Register(UserRegisterRequest)returns(RegisterReplay);
   rpc SignIn(UserRequest)returns(UserDetailsReplay);
   rpc UpdateProfile(UpdateRequest)returns(RegisterReplay);
-
+  rpc GetUserAssets(UserRequest)returns(AssetsReply);
+  rpc ConfirmedFirstLogIn(UserRequest)returns(OperationReply);
 }
 
 // The request message containing the user's name.
@@ -111,4 +112,17 @@ message SkillRequest{
      int32 ProfessionId=1;
      int32 SkillId=2;
      bool IsActive=3;
+}
+
+message AssetsResponse{
+     string token=1;
+     string twoFa=2;
+}
+message AssetsReply{
+ OperationCompletionStatus status=1;
+ AssetsResponse response=2;
+}
+message OperationReply{
+    
+ OperationCompletionStatus status=1;
 }

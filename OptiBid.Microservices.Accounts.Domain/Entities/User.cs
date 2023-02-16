@@ -9,6 +9,7 @@ namespace OptiBid.Microservices.Accounts.Domain.Entities
         public string LastName { get; set; }
         public string Username { get; set; }
         public string PasswordHash { get; set; }
+        public bool FirstLogIn { get; set; } = true;
         public int? UserRoleID { get; set; }
         public UserRole? UserRole { get; set; }
         public int? CountryID { get; set; }

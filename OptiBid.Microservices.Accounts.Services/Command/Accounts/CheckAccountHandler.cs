@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using OptiBid.Microservices.Accounts.Services.UnitOfWork;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OptiBid.Microservices.Accounts.Services.Utility;
 
 namespace OptiBid.Microservices.Accounts.Services.Command.Accounts

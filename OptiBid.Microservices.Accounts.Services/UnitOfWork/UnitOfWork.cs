@@ -18,8 +18,10 @@ namespace OptiBid.Microservices.Accounts.Services.UnitOfWork
             _contactTypeRepository=new Repository<ContactType>(_accountsContext);
             _countryRepository=new Repository<Country>(_accountsContext);
             _userRolesRepository = new Repository<UserRole>(_accountsContext);
+            _accountAssetsRepository = new AccountAssetsRepository(_accountsContext);
         }
         public IAccountRepository _usersRepository { get; set; }
+        public IAccountAssets _accountAssetsRepository { get; set; }
         public IRepository<Skill> _skillRepository { get; set; }
         public IRepository<Contact> _contactRepository { get; set; }
         public IRepository<ContactType> _contactTypeRepository { get; set; }

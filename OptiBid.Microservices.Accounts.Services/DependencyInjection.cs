@@ -19,6 +19,7 @@ namespace OptiBid.Microservices.Accounts.Services
             services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IAccountRepository), typeof(AccountRepository));
+            services.AddScoped(typeof(IAccountAssets), typeof(AccountAssetsRepository));
             services.AddScoped(typeof(IFireForgetHandler), typeof(FireForgetHandler));
 
             services.AddScoped<UnitOfWork.IUnitOfWork, UnitOfWork.UnitOfWork>();
