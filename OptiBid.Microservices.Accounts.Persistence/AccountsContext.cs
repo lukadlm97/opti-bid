@@ -25,6 +25,8 @@ namespace OptiBid.Microservices.Accounts.Persistence
 
         public DbSet<Skill> Skills { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<UserToken> UserTokens { get; set; }
+        public DbSet<UserTwoFAAssets> UserTwoFaAssets { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AccountsContext).Assembly);

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OptiBid.Microservices.Accounts.Persistence;
 
@@ -11,9 +12,11 @@ using OptiBid.Microservices.Accounts.Persistence;
 namespace OptiBid.Microservices.Accounts.Persistence.Migrations
 {
     [DbContext(typeof(AccountsContext))]
-    partial class AccountsContextModelSnapshot : ModelSnapshot
+    [Migration("20230216000723_Add_User_Token_And_2FA_Source_To_DB_Schema_202302160103")]
+    partial class AddUserTokenAnd2FASourceToDBSchema202302160103
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

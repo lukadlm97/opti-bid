@@ -12,8 +12,10 @@ namespace OptiBid.Microservices.Services.Utilities
         public static void AddAccountApplication(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped(typeof(IAccountGrpcFactory), typeof(AccountGrpcFactory));
+            serviceCollection.AddScoped(typeof(IAuctionGrpcFactory), typeof(AuctionGrpcFactory));
             serviceCollection.AddScoped(typeof(IAccountEnumerationGrpcService), typeof(AccountEnumerationGrpcService));
-            serviceCollection.AddScoped(typeof(IAccountDashboardService), typeof(AccountDashboardService));
+            serviceCollection.AddScoped(typeof(ICategoryEnumerationGrpcService), typeof(CategoryEnumerationGrpcService));
+            serviceCollection.AddScoped(typeof(ICategoryDashboardService), typeof(CategoryService));
             serviceCollection.AddScoped(typeof(IFireForget<>), typeof(FireForget<>));
             
         }

@@ -2,8 +2,10 @@
 
 namespace OptiBid.Microservices.Contracts.Services
 {
-    public interface IAccountDashboardService
+    public interface ICategoryDashboardService
     {
+        Task<OperationResult<EnumItem>> GetProducts(CancellationToken cancellationToken = default);
+        Task<OperationResult<EnumItem>> GetServices(CancellationToken cancellationToken = default);
         Task<OperationResult<EnumItem>> GetCountries(CancellationToken cancellationToken);
         Task<OperationResult<EnumItem>> GetProfessions(CancellationToken cancellationToken);
         Task<OperationResult<EnumItem>> GetContactTypes(CancellationToken cancellationToken);

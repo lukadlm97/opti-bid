@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OptiBid.Microservices.Accounts.Services.Utility
+﻿namespace OptiBid.Microservices.Accounts.Services.Utility
 {
     public static class PasswordExtensions
     {

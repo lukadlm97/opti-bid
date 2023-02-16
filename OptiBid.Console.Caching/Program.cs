@@ -10,7 +10,7 @@ using OptiBid.Microservices.Shared.Caching.Utilities;
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostingContext, services) =>
     {
-        services.AddHybridCaching(hostingContext);
+        services.AddHybridCaching();
     });
 
 
