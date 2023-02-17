@@ -45,6 +45,7 @@ message SingleUser {
     string name=2;
     string username=3;
     string role=4;
+    bool firstLogIn=5;
 }
 
 message SingleContact{

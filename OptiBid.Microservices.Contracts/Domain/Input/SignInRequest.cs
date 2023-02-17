@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace OptiBid.Microservices.Contracts.Domain.Input
 {
-    public class ContactRequest
+    public class SignInRequest
     {
-        public int ContactTypeId { get; set; }
-        public string Content { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }
