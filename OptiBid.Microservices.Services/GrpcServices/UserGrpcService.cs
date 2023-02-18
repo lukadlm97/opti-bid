@@ -325,5 +325,92 @@ namespace OptiBid.Microservices.Services.GrpcServices
 
             return false;
         }
+
+        public async Task<IEnumerable<SingleUserResult>> Get(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var grpcClient = _accountGrpcFactory.GetUserClient();
+                var users = await grpcClient.GetAsync(new UsersPagingRequest()
+                {
+                    Page = 1,
+                    Size = 20
+                });
+                return users.Users.Select(x => new SingleUserResult()
+                {
+                    ID = x.Id,
+                    Username = x.Username,
+                    FirstLogIn = x.FirstLogIn,
+                    Name = x.Name,
+                    Role = x.Role
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+
+            }
+
+            return null;
+        }
+
+        public async Task<bool> Update(int id,UserRequest userRequest, CancellationToken cancellationToken = default)
+        {
+            var grpcClient =  _accountGrpcFactory.GetUserClient();
+            IEnumerable<SkillRequest> skills = MapSkills(userRequest.Skills);
+            IEnumerable<ContactRequest> contact = MapContacts(userRequest.Contacts);
+
+            var replay = await grpcClient.UpdateProfileAsync(new UpdateRequest()
+            {
+                UserId = id,
+                User = new UserRegisterRequest()
+                {
+                    FirstName = userRequest.FirstName,
+                    CountryId = userRequest.CountryId,
+                    Email = userRequest.Email,
+                    LastName = userRequest.LastName,
+                    Password = userRequest.Password,
+                    Contacts = { contact },
+                    Skills = { skills }
+                }
+            });
+            if (replay != null)
+            {
+                return replay.Status switch
+                {
+                    OperationCompletionStatus.Success => true,
+                    OperationCompletionStatus.BadRequest or OperationCompletionStatus.NotFound or _ => false
+                };
+            }
+            return false;
+        }
+
+        private IEnumerable<ContactRequest> MapContacts(IEnumerable<Contracts.Domain.Input.ContactRequest> userRequestContacts)
+        {
+            List< ContactRequest > contacts = new List< ContactRequest >();
+            foreach (var userRequestContact in userRequestContacts)
+            {
+                contacts.Add(new ContactRequest()
+                {
+                    Content = userRequestContact.Content,
+                    ContactTypeId = userRequestContact.ContactTypeId
+                });
+            }
+
+            return contacts;
+        }
+
+        private IEnumerable<SkillRequest> MapSkills(IEnumerable<Contracts.Domain.Input.SkillRequest> userRequestSkills)
+        {
+            List<SkillRequest> skills = new List<SkillRequest>();
+            foreach (var userRequestSkill in userRequestSkills)
+            {
+                skills.Add(new SkillRequest()
+                {
+                    ProfessionId = userRequestSkill.ProfessionId
+                });
+            }
+            return skills;
+        }
     }
 }
