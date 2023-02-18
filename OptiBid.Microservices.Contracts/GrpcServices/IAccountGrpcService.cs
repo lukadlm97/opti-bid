@@ -13,6 +13,7 @@ namespace OptiBid.Microservices.Contracts.GrpcServices
         Task<Domain.Output.User.AssetsResult> RefreshToken(string username,string refreshToken, CancellationToken cancellationToken = default);
         Task<bool> ConfirmFirstSignIn(string username,CancellationToken cancellationToken=default);
         Task<Domain.Output.User.UserResult> GetById(int id,CancellationToken cancellationToken=default);
+        Task<Domain.Output.User.UserResult> GetByUsername(string username, CancellationToken cancellationToken = default);
         Task<bool> Register(Domain.Input.UserRequest userRequest,CancellationToken cancellationToken=default);
     }
 }

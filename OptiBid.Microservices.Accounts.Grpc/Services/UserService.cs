@@ -92,6 +92,25 @@ namespace OptiBid.Microservices.Accounts.Grpc.Services
 
         }
 
+        public override async Task<UserDetailsReplay> GetByUsername(UserRequest request, ServerCallContext context)
+        {
+            var (notNull, user) = await _mediator.Send(new GetAccountByUsernameCommand() { Username = request.Username },
+                cancellationToken: context.CancellationToken);
+
+            if (notNull)
+            {
+                return new UserDetailsReplay()
+                {
+                    User = _mapper.Map<Domain.DTOs.UserDetails, UserServiceDefinition.SingleUserDetails>(user),
+                    Status = OperationCompletionStatus.Success
+                };
+
+            }
+            return new UserDetailsReplay()
+            {
+                Status = OperationCompletionStatus.NotFound
+            };
+        }
 
         public override async Task<RegisterReplay> Register(UserRegisterRequest request, ServerCallContext context)
         {

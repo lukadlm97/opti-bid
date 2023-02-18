@@ -37,6 +37,7 @@ namespace OptiBid.Microservices.Services.GrpcServices
                         Id = reply.User.Id,
                         FirstLogIn = reply.User.FirstLogIn,
                         Username = reply.User.Username,
+                        UserRoleID = reply.User.UserRoleID
                     },
                     OperationCompletionStatus.BadRequest=>new UserResult()
                     {
@@ -198,6 +199,67 @@ namespace OptiBid.Microservices.Services.GrpcServices
                             Skills = skills
                         };
                         
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return default;
+        }
+
+        public async Task<UserResult> GetByUsername(string username, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var client = _accountGrpcFactory.GetUserClient();
+                var replay = await client.GetByUsernameAsync(new Accounts.Grpc.UserServiceDefinition.UserRequest()
+                {
+                    Username = username
+                }, cancellationToken: cancellationToken);
+
+                if (replay != null)
+                {
+                    if (replay.Status == OperationCompletionStatus.Success)
+                    {
+                        var skills = new List<Skill>();
+                        foreach (var singleSkill in replay.User.Skills)
+                        {
+                            var skill = new Skill()
+                            {
+                                Id = singleSkill.Id,
+                                IsActive = singleSkill.IsActive,
+                                ProfessionId = singleSkill.ProfessionId
+                            };
+                            skills.Add(skill);
+                        }
+
+                        var contacts = new List<Contact>();
+                        foreach (var singleContact in replay.User.Contacts)
+                        {
+                            var contact = new Contact()
+                            {
+                                ContactTypeId = singleContact.ContactTypeId,
+                                Content = singleContact.Content,
+                                Id = singleContact.Id,
+                                IsActive = singleContact.IsActive
+                            };
+                            contacts.Add(contact);
+                        }
+
+                        return new UserResult()
+                        {
+                            Id = replay.User.Id,
+                            CountryId = replay.User.CountryId,
+                            FirstLogIn = replay.User.FirstLogIn,
+                            Name = replay.User.Name,
+                            UserRoleID = replay.User.UserRoleID,
+                            Username = replay.User.Username,
+                            Contacts = contacts,
+                            Skills = skills
+                        };
                     }
                 }
             }

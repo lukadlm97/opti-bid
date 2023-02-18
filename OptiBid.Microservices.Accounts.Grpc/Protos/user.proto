@@ -13,6 +13,7 @@ service User {
   // Sends a greeting
   rpc Get (UsersPagingRequest) returns (UsersReplay);
   rpc GetById(UsersRequest) returns (UserDetailsReplay);
+  rpc GetByUsername(UserRequest) returns (UserDetailsReplay);
   rpc Register(UserRegisterRequest)returns(RegisterReplay);
   rpc SignIn(UserRequest)returns(UserDetailsReplay);
   rpc UpdateProfile(UpdateRequest)returns(RegisterReplay);

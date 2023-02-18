@@ -51,7 +51,10 @@ namespace OptiBid.Microservices.Accounts.Data.Repository
 
         public async Task<User?> GetByUsername(string username, CancellationToken cancellationToken = default)
         {
-            return await this.accountsContext.Users.FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
+            return await this.accountsContext.Users.Include(x => x.Country)
+                .Include(x => x.Contacts)
+                .Include(x => x.Skills)
+                .FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
         }
     }
 }

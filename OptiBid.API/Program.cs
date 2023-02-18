@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OptiBid.API.Hubs;
 using OptiBid.API.Producer;
@@ -14,6 +16,9 @@ using OptiBid.Microservices.Shared.Caching.Configuration;
 using OptiBid.Microservices.Shared.Caching.Utilities;
 using System;
 using System.Reflection;
+using System.Text;
+using OptiBid.Microservices.Contracts.Services;
+using OptiBid.Microservices.Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +27,7 @@ builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection("R
 builder.Services.Configure<ChannelSettings>(builder.Configuration.GetSection("ChannelSettings"));
 builder.Services.Configure<RabbitMqQueueSettings>(builder.Configuration.GetSection("RabbitQueueName"));
 builder.Services.Configure<ExternalGrpcSettings>(builder.Configuration.GetSection("ExternalGrpcSettings"));
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<HybridCacheSettings>(builder.Configuration.GetSection(nameof(HybridCacheSettings)));
 
 builder.Services.AddControllers();
@@ -44,6 +50,25 @@ builder.Services.AddSignalR()
     {
         options.EnableDetailedErrors = true;
     });
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(o =>
+{
+    var Key = Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]);
+    o.SaveToken = true;
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Key)
+    };
+}); 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -82,6 +107,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseAuthentication(); // This need to be added	
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {

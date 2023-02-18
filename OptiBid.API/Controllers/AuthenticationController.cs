@@ -2,6 +2,8 @@
 using OptiBid.API.Utilities;
 using OptiBid.Microservices.Contracts.Services;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using OptiBid.Microservices.Contracts.Domain.Output.User;
 
 namespace OptiBid.API.Controllers
 {  /// <summary>
@@ -94,12 +96,13 @@ namespace OptiBid.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpPost("verify")]
-        public async Task<ActionResult<string>> Verify(
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult<SecondStepResult>> Verify(
             [FromBody] OptiBid.Microservices.Contracts.Domain.Input.TwoFaRequest twoFaRequest, CancellationToken cancellationToken = default)
         {
-            if (HttpContext.User.HasClaim(claim => claim.Type == ClaimTypes.NameIdentifier))
+            if (HttpContext.User.HasClaim(claim => claim.Type == ClaimTypes.Name))
             {
-                var userName = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                var userName = HttpContext.User.FindFirst(ClaimTypes.Name)!.Value;
                 return await _authenticationService.Verify(userName, twoFaRequest.Code, cancellationToken)
                     .ToActionResult();
             }
@@ -126,13 +129,14 @@ namespace OptiBid.API.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "User")]
         [HttpPost("validate")]
-        public async Task<ActionResult<string>> Validate(
+        public async Task<ActionResult<SecondStepResult>> Validate(
             [FromBody] OptiBid.Microservices.Contracts.Domain.Input.TwoFaRequest twoFaRequest, CancellationToken cancellationToken = default)
         {
-            if (HttpContext.User.HasClaim(claim => claim.Type == ClaimTypes.NameIdentifier))
+            if (HttpContext.User.HasClaim(claim => claim.Type == ClaimTypes.Name))
             {
-                var userName = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                var userName = HttpContext.User.FindFirst(ClaimTypes.Name)!.Value;
                 return await _authenticationService.Validate(userName, twoFaRequest.Code, cancellationToken)
                     .ToActionResult();
             }

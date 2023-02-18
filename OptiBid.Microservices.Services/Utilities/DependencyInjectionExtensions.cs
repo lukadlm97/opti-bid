@@ -18,6 +18,8 @@ namespace OptiBid.Microservices.Services.Utilities
             serviceCollection.AddScoped(typeof(ICategoryDashboardService), typeof(CategoryService));
             serviceCollection.AddScoped(typeof(IAccountGrpcService), typeof(UserGrpcService));
             serviceCollection.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
+            serviceCollection.AddScoped<IJwtManager, JwtManager>();
+            serviceCollection.AddScoped<IAccountService, AccountService>();
 
             serviceCollection.AddScoped(typeof(IFireForget<>), typeof(FireForget<>));
             

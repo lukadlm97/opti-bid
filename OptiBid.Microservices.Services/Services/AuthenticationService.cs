@@ -10,10 +10,14 @@ namespace OptiBid.Microservices.Services.Services
     public class AuthenticationService:IAuthenticationService
     {
         private readonly IAccountGrpcService _accountGrpcService;
+        private readonly IJwtManager _jwtManager;
+        private readonly ICategoryDashboardService _categoryDashboardService;
 
-        public AuthenticationService(IAccountGrpcService accountGrpcService)
+        public AuthenticationService(IAccountGrpcService accountGrpcService,IJwtManager jwtManager,ICategoryDashboardService categoryDashboardService)
         {
             _accountGrpcService = accountGrpcService;
+            _jwtManager = jwtManager;
+            _categoryDashboardService = categoryDashboardService;
         }
         public async Task<OperationResult<SignInResult>> SignIn(string username, string password, CancellationToken cancellationToken = default)
         {
@@ -41,6 +45,19 @@ namespace OptiBid.Microservices.Services.Services
                 };
             }
 
+            var signleRole =
+                (await _categoryDashboardService.GetUserRoles(cancellationToken)).Collection.FirstOrDefault(x =>
+                    x.ID == userResult.UserRoleID);
+            if (signleRole == null)
+            {
+                return new OperationResult<SignInResult>()
+                {
+                    Status = OperationResultStatus.NotFound
+                };
+
+            }
+
+            var token = _jwtManager.GenerateToken(userResult.Username, signleRole.Name);
             if (userResult.FirstLogIn)
             {
                 var userAssets = await _accountGrpcService.GetAssets(username, cancellationToken);
@@ -63,7 +80,8 @@ namespace OptiBid.Microservices.Services.Services
                                 QrCode = qrCodeImageUrl
                             },
                             Username = userResult.Username,
-                            RefreshToken = userAssets.RefreshToken
+                            RefreshToken = userAssets.RefreshToken,
+                            Token = token
                         },
                     };
                 }
@@ -87,7 +105,8 @@ namespace OptiBid.Microservices.Services.Services
                     Data = new SignInResult()
                     {
                         Username = userResult.Username,
-                        RefreshToken = userAssets.RefreshToken
+                        RefreshToken = userAssets.RefreshToken,
+                        Token = token
                     }
                 };
             }
@@ -133,8 +152,8 @@ namespace OptiBid.Microservices.Services.Services
                 Status = OperationResultStatus.BadRequest
             };
         }
-
-        public async Task<OperationResult<string>> Verify(string username, string code, CancellationToken cancellationToken)
+        
+        public async Task<OperationResult<SecondStepResult>> Verify(string username, string code, CancellationToken cancellationToken)
         {
             var userAssets = await _accountGrpcService.GetAssets(username, cancellationToken);
 
@@ -146,35 +165,44 @@ namespace OptiBid.Microservices.Services.Services
                 {
                     var isConfirmFirstSignIn = await _accountGrpcService.ConfirmFirstSignIn(username, cancellationToken);
 
-                    if (isConfirmFirstSignIn)
+                    var userResult = await _accountGrpcService.GetByUsername(username, cancellationToken);
+                    var userRole =
+                        (await _categoryDashboardService.GetUserRoles(cancellationToken)).Collection.FirstOrDefault(x =>
+                            x.ID == userResult.UserRoleID);
+                    if (!isConfirmFirstSignIn && userResult == null || userRole == null)
                     {
-                        return new OperationResult<string>()
+                        return new OperationResult<SecondStepResult>()
                         {
-                            Status = OperationResultStatus.Success,
-
+                            Status = OperationResultStatus.NotFound
                         };
                     }
 
-                    return new OperationResult<string>()
+                    var token = _jwtManager.GenerateToken(userResult.Username, userRole.Name);
+                    return new OperationResult<SecondStepResult>()
                     {
-                        Status = OperationResultStatus.Error
+                        Status = OperationResultStatus.Success,
+                        Data = new SecondStepResult()
+                        {
+                            Token = token
+
+                        }
                     };
 
                 }
-                return new OperationResult<string>()
+                return new OperationResult<SecondStepResult>()
                 {
                     Status = OperationResultStatus.BadRequest,
                     ErrorMessage = "invalid 2fa code"
                 };
             }
 
-            return new OperationResult<string>()
+            return new OperationResult<SecondStepResult>()
             {
                 Status = OperationResultStatus.NotFound
             };
         }
 
-        public async Task<OperationResult<string>> Validate(string username, string code, CancellationToken cancellationToken)
+        public async Task<OperationResult<SecondStepResult>> Validate(string username, string code, CancellationToken cancellationToken)
         {
             var userAssets = await _accountGrpcService.GetAssets(username, cancellationToken);
 
@@ -184,21 +212,55 @@ namespace OptiBid.Microservices.Services.Services
                 bool result = tfa.ValidateTwoFactorPIN(userAssets.TwoFaSource, code);
                 if (result)
                 {
-
-                    return new OperationResult<string>()
+                    var userResult = await _accountGrpcService.GetByUsername(username, cancellationToken);
+                    var userRole =
+                        (await _categoryDashboardService.GetUserRoles(cancellationToken)).Collection.FirstOrDefault(x =>
+                            x.ID == userResult.UserRoleID);
+                    if (userResult == null || userRole ==null)
                     {
-                        Status = OperationResultStatus.Success
+                        return new OperationResult<SecondStepResult>()
+                        {
+                            Status = OperationResultStatus.NotFound
+                        };
+                    }
+
+                    var token = _jwtManager.GenerateToken(userResult.Username, userRole.Name);
+                    return new OperationResult<SecondStepResult>()
+                    {
+                        Status = OperationResultStatus.Success,
+                        Data = new SecondStepResult()
+                        {
+                            Token = token
+                        }
                     };
 
                 }
-                return new OperationResult<string>()
+                return new OperationResult<SecondStepResult>()
                 {
-                    Status = OperationResultStatus.Error,
+                    Status = OperationResultStatus.BadRequest,
                     ErrorMessage = "invalid 2fa code"
                 };
             }
 
-            return new OperationResult<string>()
+            return new OperationResult<SecondStepResult>()
+            {
+                Status = OperationResultStatus.NotFound
+            };
+        }
+
+        public async Task<OperationResult<UserResult>> GetDetails(string username, CancellationToken cancellationToken)
+        {
+            var userProfile = await _accountGrpcService.GetByUsername(username, cancellationToken);
+            if (userProfile != null)
+            {
+                return new OperationResult<UserResult>()
+                {
+                    Data = userProfile,
+                    Status = OperationResultStatus.Success
+                };
+            }
+
+            return new OperationResult<UserResult>()
             {
                 Status = OperationResultStatus.NotFound
             };
