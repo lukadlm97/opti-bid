@@ -145,7 +145,7 @@ namespace OptiBid.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "User")]
-        [HttpGet("all")]
+        [HttpPut()]
         public async Task<ActionResult<bool>> Update([FromBody] UserRequest userRequest,CancellationToken cancellationToken = default)
         {
             if (HttpContext.User.HasClaim(claim => claim.Type == ClaimTypes.Name))

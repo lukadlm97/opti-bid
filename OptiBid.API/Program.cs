@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Text;
 using OptiBid.Microservices.Contracts.Services;
 using OptiBid.Microservices.Services.Services;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -94,6 +95,12 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
+});
+builder.Logging.ClearProviders();
+builder.Host.UseSerilog((hostContext, services, configuration) => {
+    configuration
+        .WriteTo.File("serilog-file.txt")
+        .WriteTo.Console();
 });
 
 var app = builder.Build();
