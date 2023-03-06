@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace OptiBid.Microservices.Contracts.Domain.Input
 {
-    public class RefreshTokenRequest
-    {
-        public string RefreshToken { get; set; }
-    }
+    public record RefreshTokenRequest(string RefreshToken);
 }

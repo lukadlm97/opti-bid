@@ -6,8 +6,5 @@ using System.Threading.Tasks;
 
 namespace OptiBid.Microservices.Contracts.Domain.Input
 {
-    public class TwoFaRequest
-    {
-        public string Code { get; set; }
-    }
+    public record TwoFaRequest(string Code);
 }

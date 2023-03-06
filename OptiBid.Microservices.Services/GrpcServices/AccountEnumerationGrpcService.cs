@@ -22,12 +22,12 @@ namespace OptiBid.Microservices.Services.GrpcServices
             {
                 var grpcClient = _accountGrpcFactory.GetDashboardClient();
                 var countries = await grpcClient.GetAllCountriesAsync(new EmptyRequest() { });
-                return countries.Countries.Select(x => new EnumItem() { ID = x.Id, Name = x.Name });
+                return countries.Countries.Select(x => new EnumItem(x.Id,x.Name));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return null;
+                return Array.Empty<EnumItem>();
             }
         }
 
@@ -37,16 +37,12 @@ namespace OptiBid.Microservices.Services.GrpcServices
             {
                 var grpcClient = _accountGrpcFactory.GetDashboardClient();
                 var contactTypes = await grpcClient.GetAllContactTypesAsync(new EmptyRequest() { });
-                return contactTypes.ContactTypes.Select(x => new EnumItem()
-                {
-                    ID = x.Id,
-                    Name = x.Name,
-                });
+                return contactTypes.ContactTypes.Select(x => new EnumItem(x.Id, x.Name));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return null;
+                return Array.Empty<EnumItem>();
             }
            
         }
@@ -57,16 +53,12 @@ namespace OptiBid.Microservices.Services.GrpcServices
             {
                 var grpcClient = _accountGrpcFactory.GetDashboardClient();
                 var professions = await grpcClient.GetAllProfessionsAsync(new EmptyRequest() { });
-                return professions.Professions.Select(x => new EnumItem()
-                {
-                    ID = x.Id,
-                    Name = x.Name
-                });
+                return professions.Professions.Select(x => new EnumItem(x.Id, x.Name));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return null;
+                return Array.Empty<EnumItem>();
             }
            
         }
@@ -77,16 +69,12 @@ namespace OptiBid.Microservices.Services.GrpcServices
             {
                 var grpcClient = _accountGrpcFactory.GetDashboardClient();
                 var reply = await grpcClient.GetAllUserRolesAsync(new EmptyRequest() { });
-                return reply.UserRoles.Select(x => new EnumItem()
-                {
-                    ID = x.Id,
-                    Name = x.Name
-                });
+                return reply.UserRoles.Select(x => new EnumItem(x.Id, x.Name));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return null;
+                return Array.Empty<EnumItem>();
             }
             
         }

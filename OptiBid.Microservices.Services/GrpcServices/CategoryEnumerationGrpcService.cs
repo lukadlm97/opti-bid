@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using Microsoft.Extensions.Logging;
 using OptiBid.Microservices.Auction.Grpc.CategoriesServiceDefinition;
 using OptiBid.Microservices.Contracts.Domain.Output;
@@ -27,12 +23,12 @@ namespace OptiBid.Microservices.Services.GrpcServices
             {
                 var grpcClient = _auctionGrpcFactory.GetCategoryClient();
                 var replay = await grpcClient.GetProductsAsync(new EmptyRequest());
-                return replay.Categories.Select(x => new EnumItem() { ID = x.Id, Name = x.Name });
+                return replay.Categories.Select(x => new EnumItem(x.Id, x.Name));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return null;
+                return Array.Empty<EnumItem>();
             }
         }
 
@@ -42,12 +38,12 @@ namespace OptiBid.Microservices.Services.GrpcServices
             {
                 var grpcClient = _auctionGrpcFactory.GetCategoryClient();
                 var replay = await grpcClient.GetServicesAsync(new EmptyRequest());
-                return replay.Categories.Select(x => new EnumItem() { ID = x.Id, Name = x.Name });
+                return replay.Categories.Select(x => new EnumItem(x.Id, x.Name));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return null;
+                return Array.Empty<EnumItem>();
             }
         }
     }

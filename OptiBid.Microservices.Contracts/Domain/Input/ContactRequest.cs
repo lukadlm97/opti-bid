@@ -6,9 +6,5 @@ using System.Threading.Tasks;
 
 namespace OptiBid.Microservices.Contracts.Domain.Input
 {
-    public class ContactRequest
-    {
-        public int ContactTypeId { get; set; }
-        public string Content { get; set; }
-    }
+    public record ContactRequest(int ContactTypeId, string Content);
 }

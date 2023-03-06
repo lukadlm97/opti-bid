@@ -36,6 +36,9 @@
     <Protobuf Include="..\OptiBid.Microservices.Auction.Grpc\Protos\categories.proto" GrpcServices="Client">
       <Link>Protos\categories.proto</Link>
     </Protobuf>
+    <Protobuf Include="..\OptiBid.Microservices.Auction.Grpc\Protos\customer.proto" GrpcServices="Client">
+      <Link>Protos\customer.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>

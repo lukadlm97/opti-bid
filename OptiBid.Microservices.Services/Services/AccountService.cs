@@ -28,37 +28,25 @@ namespace OptiBid.Microservices.Services.Services
                 userProfile = await _accountGrpcService.GetByUsername(username, cancellationToken);
                 if (userProfile == null)
                 {
-                    return new OperationResult<UserResult>()
-                    {
-                        Status = OperationResultStatus.NotFound
-                    };
+                    return new OperationResult<UserResult>(userProfile, default, OperationResultStatus.NotFound, default);
+           
                 }
                 _fireForget.Execute(x=>x.Set(username,userProfile,cancellationToken));
             }
-            return new OperationResult<UserResult>()
-            {
-                Data = userProfile,
-                Status = OperationResultStatus.Success
-            };
+            return new OperationResult<UserResult>(userProfile, default, OperationResultStatus.Success, default);
+    
         }
 
         public async Task<OperationResult<UserResult>> GetDetails(int userId, CancellationToken cancellationToken)
         {
            
-                var userProfile = await _accountGrpcService.GetById(userId, cancellationToken);
-                if (userProfile == null)
-                {
-                    return new OperationResult<UserResult>()
-                    {
-                        Status = OperationResultStatus.NotFound
-                    };
-                }
-              
-            return new OperationResult<UserResult>()
+            var userProfile = await _accountGrpcService.GetById(userId, cancellationToken);
+            if (userProfile == null)
             {
-                Data = userProfile,
-                Status = OperationResultStatus.Success
-            };
+                return new OperationResult<UserResult>(userProfile, default, OperationResultStatus.NotFound, default);
+            }
+            return new OperationResult<UserResult>(userProfile, default, OperationResultStatus.Success, default);
+     
         }
 
         public async Task<OperationResult<SingleUserResult>> Get(CancellationToken cancellationToken)
@@ -66,17 +54,11 @@ namespace OptiBid.Microservices.Services.Services
             var users = await _accountGrpcService.Get(cancellationToken);
             if (users == null)
             {
-                return new OperationResult<SingleUserResult>()
-                {
-                    Status = OperationResultStatus.NotFound
-                };
+                return new OperationResult<SingleUserResult>(default, default, OperationResultStatus.NotFound, default);
+              
             }
+            return new OperationResult<SingleUserResult>(default, users, OperationResultStatus.Success, default);
 
-            return new OperationResult<SingleUserResult>()
-            {
-                Collection = users,
-                Status = OperationResultStatus.Success
-            };
         }
 
         public async Task<OperationResult<bool>> UpdateProfile(string username,UserRequest userRequest, CancellationToken cancellationToken)
@@ -84,26 +66,17 @@ namespace OptiBid.Microservices.Services.Services
             var user = await _accountGrpcService.GetByUsername(username, cancellationToken);
             if (user == null)
             {
-                return new OperationResult<bool>()
-                {
-                    Status = OperationResultStatus.NotFound
-                };
+                return new OperationResult<bool>(false, default, OperationResultStatus.NotFound, default);
             }
             var isChanged = await _accountGrpcService.Update(user.Id, userRequest, cancellationToken);
 
             if (isChanged)
             {
-                return new OperationResult<bool>()
-                {
-                    Status = OperationResultStatus.Success,
-                    Data = true
-                };
+                return new OperationResult<bool>(true,default, OperationResultStatus.Success,default);
             }
+            return new OperationResult<bool>(false, default, OperationResultStatus.BadRequest, default);
 
-            return new OperationResult<bool>()
-            {
-                Status = OperationResultStatus.BadRequest
-            };
+            
         }
     }
 }

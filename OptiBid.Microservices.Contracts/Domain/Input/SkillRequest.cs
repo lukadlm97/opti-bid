@@ -1,8 +1,6 @@
 ﻿
 namespace OptiBid.Microservices.Contracts.Domain.Input
 {
-    public class SkillRequest
-    {
-        public int ProfessionId { get; set; }
-    }
+    public record SkillRequest(int ProfessionId);
+
 }
