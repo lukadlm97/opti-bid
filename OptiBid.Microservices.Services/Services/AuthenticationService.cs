@@ -7,42 +7,37 @@ using OptiBid.Microservices.Contracts.Services;
 
 namespace OptiBid.Microservices.Services.Services
 {
-    public class AuthenticationService:IAuthenticationService
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly IAccountGrpcService _accountGrpcService;
         private readonly IJwtManager _jwtManager;
         private readonly ICategoryDashboardService _categoryDashboardService;
 
-        public AuthenticationService(IAccountGrpcService accountGrpcService,IJwtManager jwtManager,ICategoryDashboardService categoryDashboardService)
+        public AuthenticationService(IAccountGrpcService accountGrpcService, IJwtManager jwtManager,
+            ICategoryDashboardService categoryDashboardService)
         {
             _accountGrpcService = accountGrpcService;
             _jwtManager = jwtManager;
             _categoryDashboardService = categoryDashboardService;
         }
-        public async Task<OperationResult<SignInResult>> SignIn(string username, string password, CancellationToken cancellationToken = default)
+
+        public async Task<OperationResult<SignInResult>> SignIn(string username, string password,
+            CancellationToken cancellationToken = default)
         {
             var userResult = await _accountGrpcService.SignIn(username, password, cancellationToken);
             if (userResult == null)
             {
-                return new OperationResult<SignInResult>()
-                {
-                    Status = OperationResultStatus.BadRequest
-                };
-            }
-            if (userResult.Id == -1)
-            {
-                return new OperationResult<SignInResult>()
-                {
-                    Status = OperationResultStatus.BadRequest
-                };
+                return new OperationResult<SignInResult>(null, null, OperationResultStatus.BadRequest, null);
             }
 
-            if (userResult.Id==0)
+            if (userResult.Id == -1)
             {
-                return new OperationResult<SignInResult>()
-                {
-                    Status = OperationResultStatus.NotFound
-                };
+                return new OperationResult<SignInResult>(null, null, OperationResultStatus.BadRequest, null);
+            }
+
+            if (userResult.Id == 0)
+            {
+                return new OperationResult<SignInResult>(null, null, OperationResultStatus.NotFound, null);
             }
 
             var signleRole =
@@ -50,10 +45,7 @@ namespace OptiBid.Microservices.Services.Services
                     x.ID == userResult.UserRoleID);
             if (signleRole == null)
             {
-                return new OperationResult<SignInResult>()
-                {
-                    Status = OperationResultStatus.NotFound
-                };
+                return new OperationResult<SignInResult>(null, null, OperationResultStatus.NotFound, null);
 
             }
 
@@ -64,96 +56,59 @@ namespace OptiBid.Microservices.Services.Services
                 if (userAssets != null)
                 {
                     TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
-                    SetupCode setupInfo = tfa.GenerateSetupCode("OptBid", userResult.Username, userAssets.TwoFaSource, false, 3);
+                    SetupCode setupInfo = tfa.GenerateSetupCode("OptBid", userResult.Username, userAssets.TwoFaSource,
+                        false, 3);
 
                     string qrCodeImageUrl = setupInfo.QrCodeSetupImageUrl;
                     string manualEntrySetupCode = setupInfo.ManualEntryKey;
 
-                    return new OperationResult<SignInResult>()
-                    {
-                        Status = OperationResultStatus.Success,
-                        Data = new SignInResult()
-                        {
-                            TwoFa = new TwoFaResult()
-                            {
-                                ManualEntryKey = manualEntrySetupCode,
-                                QrCode = qrCodeImageUrl
-                            },
-                            Username = userResult.Username,
-                            RefreshToken = userAssets.RefreshToken,
-                            Token = token
-                        },
-                    };
+                    return new OperationResult<SignInResult>(null, null, OperationResultStatus.Success, null);
                 }
                 else
                 {
-                    return new OperationResult<SignInResult>()
-                    {
-                        Status = OperationResultStatus.NotFound
-                    };
+                    return new OperationResult<SignInResult>(null, null, OperationResultStatus.NotFound, null);
                 }
-                
+
             }
 
             if (userResult.Id > 0)
             {
 
                 var userAssets = await _accountGrpcService.GetAssets(username, cancellationToken);
-                return new OperationResult<SignInResult>()
-                {
-                    Status = OperationResultStatus.Success,
-                    Data = new SignInResult()
-                    {
-                        Username = userResult.Username,
-                        RefreshToken = userAssets.RefreshToken,
-                        Token = token
-                    }
-                };
+                return new OperationResult<SignInResult>(null, null, OperationResultStatus.Success, null);
             }
 
 
-            return new OperationResult<SignInResult>()
-            {
-                Status = OperationResultStatus.BadRequest
-            };
+            return new OperationResult<SignInResult>(null, null, OperationResultStatus.BadRequest, null);
         }
 
-        public async Task<OperationResult<string>> Register(UserRequest request, CancellationToken cancellationToken = default)
+        public async Task<OperationResult<string>> Register(UserRequest request,
+            CancellationToken cancellationToken = default)
         {
             var result = await _accountGrpcService.Register(request, cancellationToken);
             if (result == true)
             {
-                return new OperationResult<string>()
-                {
-                    Status = OperationResultStatus.Success,
-                    Data = "successfully created account"
-                };
+                return new OperationResult<string>("successfully created account", null, OperationResultStatus.Success,
+                    null);
             }
 
-            return new OperationResult<string>()
-            {
-                Status = OperationResultStatus.BadRequest
-            };
+            return new OperationResult<string>(null, null, OperationResultStatus.BadRequest, null);
         }
 
-        public async Task<OperationResult<string>> RenewToken(string username, string refreshToken, CancellationToken cancellationToken = default)
+        public async Task<OperationResult<string>> RenewToken(string username, string refreshToken,
+            CancellationToken cancellationToken = default)
         {
-            var result = await _accountGrpcService.RefreshToken(username, refreshToken,cancellationToken);
+            var result = await _accountGrpcService.RefreshToken(username, refreshToken, cancellationToken);
             if (result != default)
             {
-                return new OperationResult<string>()
-                {
-                    Status = OperationResultStatus.Success,
-                    Data = result.RefreshToken
-                };
+                return new OperationResult<string>(null, null, OperationResultStatus.Success, null);
             }
-            return new OperationResult<string>()
-            {
-                Status = OperationResultStatus.BadRequest
-            };
+
+            return new OperationResult<string>(null, null, OperationResultStatus.BadRequest, null);
         }
-        
-        public async Task<OperationResult<SecondStepResult>> Verify(string username, string code, CancellationToken cancellationToken)
+
+        public async Task<OperationResult<SecondStepResult>> Verify(string username, string code,
+            CancellationToken cancellationToken)
         {
             var userAssets = await _accountGrpcService.GetAssets(username, cancellationToken);
 
@@ -163,7 +118,8 @@ namespace OptiBid.Microservices.Services.Services
                 bool result = tfa.ValidateTwoFactorPIN(userAssets.TwoFaSource, code);
                 if (result)
                 {
-                    var isConfirmFirstSignIn = await _accountGrpcService.ConfirmFirstSignIn(username, cancellationToken);
+                    var isConfirmFirstSignIn =
+                        await _accountGrpcService.ConfirmFirstSignIn(username, cancellationToken);
 
                     var userResult = await _accountGrpcService.GetByUsername(username, cancellationToken);
                     var userRole =
@@ -171,38 +127,22 @@ namespace OptiBid.Microservices.Services.Services
                             x.ID == userResult.UserRoleID);
                     if (!isConfirmFirstSignIn && userResult == null || userRole == null)
                     {
-                        return new OperationResult<SecondStepResult>()
-                        {
-                            Status = OperationResultStatus.NotFound
-                        };
+                        return new OperationResult<SecondStepResult>(null, null, OperationResultStatus.NotFound, null);
                     }
 
                     var token = _jwtManager.GenerateToken(userResult.Username, userRole.Name);
-                    return new OperationResult<SecondStepResult>()
-                    {
-                        Status = OperationResultStatus.Success,
-                        Data = new SecondStepResult()
-                        {
-                            Token = token
-
-                        }
-                    };
+                    return new OperationResult<SecondStepResult>(null, null, OperationResultStatus.Success, null);
 
                 }
-                return new OperationResult<SecondStepResult>()
-                {
-                    Status = OperationResultStatus.BadRequest,
-                    ErrorMessage = "invalid 2fa code"
-                };
+
+                return new OperationResult<SecondStepResult>(null, null, OperationResultStatus.BadRequest, null);
             }
 
-            return new OperationResult<SecondStepResult>()
-            {
-                Status = OperationResultStatus.NotFound
-            };
+            return new OperationResult<SecondStepResult>(null, null, OperationResultStatus.NotFound, null);
         }
 
-        public async Task<OperationResult<SecondStepResult>> Validate(string username, string code, CancellationToken cancellationToken)
+        public async Task<OperationResult<SecondStepResult>> Validate(string username, string code,
+            CancellationToken cancellationToken)
         {
             var userAssets = await _accountGrpcService.GetAssets(username, cancellationToken);
 
@@ -216,36 +156,25 @@ namespace OptiBid.Microservices.Services.Services
                     var userRole =
                         (await _categoryDashboardService.GetUserRoles(cancellationToken)).Collection.FirstOrDefault(x =>
                             x.ID == userResult.UserRoleID);
-                    if (userResult == null || userRole ==null)
+                    if (userResult == null || userRole == null)
                     {
-                        return new OperationResult<SecondStepResult>()
-                        {
-                            Status = OperationResultStatus.NotFound
-                        };
+                        return new OperationResult<SecondStepResult>(null, null, OperationResultStatus.NotFound, null);
                     }
 
                     var token = _jwtManager.GenerateToken(userResult.Username, userRole.Name);
-                    return new OperationResult<SecondStepResult>()
+                    return new OperationResult<SecondStepResult>(new SecondStepResult()
                     {
-                        Status = OperationResultStatus.Success,
-                        Data = new SecondStepResult()
-                        {
-                            Token = token
-                        }
-                    };
+                        Token = token
+                    }, null, OperationResultStatus.Success, null);
 
                 }
-                return new OperationResult<SecondStepResult>()
-                {
-                    Status = OperationResultStatus.BadRequest,
-                    ErrorMessage = "invalid 2fa code"
-                };
+
+                return new OperationResult<SecondStepResult>(null, null, OperationResultStatus.BadRequest,
+                    "invalid 2fa code");
+
             }
 
-            return new OperationResult<SecondStepResult>()
-            {
-                Status = OperationResultStatus.NotFound
-            };
+            return new OperationResult<SecondStepResult>(null, null, OperationResultStatus.NotFound, null);
         }
 
         public async Task<OperationResult<UserResult>> GetDetails(string username, CancellationToken cancellationToken)
@@ -253,17 +182,11 @@ namespace OptiBid.Microservices.Services.Services
             var userProfile = await _accountGrpcService.GetByUsername(username, cancellationToken);
             if (userProfile != null)
             {
-                return new OperationResult<UserResult>()
-                {
-                    Data = userProfile,
-                    Status = OperationResultStatus.Success
-                };
+                return new OperationResult<UserResult>(userProfile, null, OperationResultStatus.Success, null);
             }
 
-            return new OperationResult<UserResult>()
-            {
-                Status = OperationResultStatus.NotFound
-            };
+            return new OperationResult<UserResult>(null, null, OperationResultStatus.NotFound, null);
         }
+
     }
 }

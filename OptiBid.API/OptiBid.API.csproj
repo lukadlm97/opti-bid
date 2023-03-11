@@ -24,7 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OptiBid.Microservices.Contracts\OptiBid.Microservices.Contracts.csproj" />
     <ProjectReference Include="..\OptiBid.Microservices.Messaging.Receving\OptiBid.Microservices.Messaging.Receving.csproj" />
-    <ProjectReference Include="..\OptiBid.Microservices.Services\OptiBid.Microservices.Services.csproj" />
+    <ProjectReference Include="..\OptiBid.Microservices.Services\OptiBid.Microservices.Infrastructure.csproj" />
     <ProjectReference Include="..\OptiBid.Microservices.Shared.Caching\OptiBid.Microservices.Shared.Caching.csproj" />
     <ProjectReference Include="..\OptiBid.Microservices.Shared.Messaging\OptiBid.Microservices.Shared.Messaging.csproj" />
   </ItemGroup>

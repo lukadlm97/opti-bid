@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using Microsoft.Extensions.Options;
+using OptiBid.Microservices.Auction.Grpc.AuctionAssetsServiceDefinition;
 using OptiBid.Microservices.Auction.Grpc.CategoriesServiceDefinition;
 using OptiBid.Microservices.Contracts.Configuration;
-using static OptiBid.Microservices.Accounts.Grpc.DashboardServiceDefinition.Dashboard;
 
 namespace OptiBid.Microservices.Services.Factory
 {
@@ -15,6 +10,7 @@ namespace OptiBid.Microservices.Services.Factory
     {
         private ExternalGrpcSettings _grpcSettings;
         private Category.CategoryClient _categoryClient;
+        private AuctionAssets.AuctionAssetsClient _assetsClient;
         public  AuctionGrpcFactory(IOptions<ExternalGrpcSettings> grpcSettings)
         {
             _grpcSettings = grpcSettings.Value;
@@ -32,6 +28,19 @@ namespace OptiBid.Microservices.Services.Factory
             }
 
             return _categoryClient;
+        }
+        private void CreateAuctionAssetsClient()
+        {
+            _assetsClient = new AuctionAssets.AuctionAssetsClient(GrpcChannel.ForAddress(_grpcSettings.AuctionServiceUrl));
+        }
+        public AuctionAssets.AuctionAssetsClient GetAuctionAssetsClient()
+        {
+            if (_assetsClient == null)
+            {
+                CreateAuctionAssetsClient();
+            }
+
+            return _assetsClient;
         }
     }
 }

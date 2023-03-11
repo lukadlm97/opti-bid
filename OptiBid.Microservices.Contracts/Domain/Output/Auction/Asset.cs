@@ -1,0 +1,10 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OptiBid.Microservices.Contracts.Domain.Output.Auction
+{
+    public record Asset(int id, string name, decimal startPrice, decimal currentPrice, string category);
+}

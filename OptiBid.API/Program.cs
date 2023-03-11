@@ -38,7 +38,9 @@ builder.Services.AddSingleton<IBidMessageQueue, BidNotificationMessageQueue>();
 builder.Services.AddSingleton<IMqConnectionFactory, RabbitMqConnectionFactory>();
 builder.Services.AddSingleton<NotificationHub>();
 builder.Services.AddSingleton<ConnectionManager>();
-builder.Services.AddAccountApplication();
+builder.Services.AddSharedApplicationModules();
+builder.Services.AddAccountApplicationModules();
+builder.Services.AddAuctionApplicationModules();
 builder.Services.AddHybridCaching();
 
 builder.Services.AddHostedService<AccountNotificationService>();

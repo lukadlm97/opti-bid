@@ -23,40 +23,29 @@ namespace OptiBid.Microservices.Services.Services
             _hybridCache = hybridCache;
             _fireForgetHandler = fireForgetHandler;
         }
+
         public async Task<OperationResult<EnumItem>> GetProducts(CancellationToken cancellationToken = default)
         {
             var key = "products";
             IEnumerable<EnumItem> products = await _hybridCache.GetCollection(key, cancellationToken);
             if (products != null)
             {
-                return new OperationResult<EnumItem>()
-                {
-                    Collection = products,
-                    Status = OperationResultStatus.Success
-                };
-            }
+                return new OperationResult<EnumItem>(null, products, OperationResultStatus.Success, null);
 
-            products = await _categoryEnumerationGrpcService.GetProducts(cancellationToken);
-            if (products == null)
-            {
-                return new OperationResult<EnumItem>()
+                products = await _categoryEnumerationGrpcService.GetProducts(cancellationToken);
+                if (products == null)
                 {
-                    Collection = products,
-                    Status = OperationResultStatus.NotFound
-                };
-            }
-            if (products != null)
-            {
-                _fireForgetHandler
-                    .Execute(x =>
-                        x.Set(key, products.ToList(), cancellationToken));
-            }
+                    return new OperationResult<EnumItem>(null, null, OperationResultStatus.NotFound, null);
+                }
 
-            return new OperationResult<EnumItem>()
-            {
-                Collection = products,
-                Status = OperationResultStatus.Success
-            };
+                if (products != null)
+                {
+                    _fireForgetHandler
+                        .Execute(x =>
+                            x.Set(key, products.ToList(), cancellationToken));
+                }
+            }
+            return new OperationResult<EnumItem>(null, products, OperationResultStatus.Success, null);
         }
 
         public async Task<OperationResult<EnumItem>> GetServices(CancellationToken cancellationToken = default)
@@ -65,21 +54,15 @@ namespace OptiBid.Microservices.Services.Services
             IEnumerable<EnumItem> categories = await _hybridCache.GetCollection(key, cancellationToken);
             if (categories != null)
             {
-                return new OperationResult<EnumItem>()
-                {
-                    Collection = categories,
-                    Status = OperationResultStatus.Success
-                };
+                return new OperationResult<EnumItem>(null, categories, OperationResultStatus.Success, null);
+                
             }
 
             categories = await _categoryEnumerationGrpcService.GetCategories(cancellationToken);
             if (categories == null)
             {
-                return new OperationResult<EnumItem>()
-                {
-                    Collection = categories,
-                    Status = OperationResultStatus.NotFound
-                };
+                return new OperationResult<EnumItem>(null, null, OperationResultStatus.NotFound, null);
+              
             }
             if (categories != null)
             {
@@ -88,11 +71,7 @@ namespace OptiBid.Microservices.Services.Services
                         x.Set(key, categories.ToList(), cancellationToken));
             }
 
-            return new OperationResult<EnumItem>()
-            {
-                Collection = categories,
-                Status = OperationResultStatus.Success
-            };
+            return new OperationResult<EnumItem>(null, categories, OperationResultStatus.Success, null);
         }
 
         public async Task<OperationResult<EnumItem>> GetProfessions(CancellationToken cancellationToken)
@@ -101,21 +80,13 @@ namespace OptiBid.Microservices.Services.Services
             IEnumerable<EnumItem> professions = await _hybridCache.GetCollection(key, cancellationToken);
             if (professions != null)
             {
-                return new OperationResult<EnumItem>()
-                {
-                    Collection = professions,
-                    Status = OperationResultStatus.Success
-                };
+                return new OperationResult<EnumItem>(null, professions, OperationResultStatus.Success, null);
             }
 
             professions = await _accountEnumerationGrpcService.GetProfessions(cancellationToken);
             if (professions == null)
             {
-                return new OperationResult<EnumItem>()
-                {
-                    Collection = professions,
-                    Status = OperationResultStatus.NotFound
-                };
+                return new OperationResult<EnumItem>(null, null, OperationResultStatus.NotFound, null);
             }
             if (professions != null)
             {
@@ -124,11 +95,7 @@ namespace OptiBid.Microservices.Services.Services
                         x.Set(key, professions.ToList(), cancellationToken));
             }
 
-            return new OperationResult<EnumItem>()
-            {
-                Collection = professions,
-                Status = OperationResultStatus.Success
-            };
+            return new OperationResult<EnumItem>(null, professions, OperationResultStatus.Success, null);
         }
 
         public async Task<OperationResult<EnumItem>> GetContactTypes(CancellationToken cancellationToken)
@@ -137,21 +104,13 @@ namespace OptiBid.Microservices.Services.Services
             IEnumerable<EnumItem> types = await _hybridCache.GetCollection(key, cancellationToken);
             if (types != null)
             {
-                return new OperationResult<EnumItem>()
-                {
-                    Collection = types,
-                    Status = OperationResultStatus.Success
-                };
+                return new OperationResult<EnumItem>(null, types, OperationResultStatus.Success, null);
             }
 
             types = await _accountEnumerationGrpcService.GetContactTypes(cancellationToken);
             if (types == null)
             {
-                return new OperationResult<EnumItem>()
-                {
-                    Collection = types,
-                    Status = OperationResultStatus.NotFound
-                };
+                return new OperationResult<EnumItem>(null, null, OperationResultStatus.NotFound, null);
             }
 
             if (types != null)
@@ -161,11 +120,7 @@ namespace OptiBid.Microservices.Services.Services
                         x.Set(key, types.ToList(), cancellationToken));
             }
 
-            return new OperationResult<EnumItem>()
-            {
-                Collection = types,
-                Status = OperationResultStatus.Success
-            };
+            return new OperationResult<EnumItem>(null, types, OperationResultStatus.Success, null);
         }
 
         public async Task<OperationResult<EnumItem>> GetUserRoles(CancellationToken cancellationToken)
@@ -174,21 +129,13 @@ namespace OptiBid.Microservices.Services.Services
             IEnumerable<EnumItem> roles = await _hybridCache.GetCollection(key, cancellationToken);
             if (roles != null)
             {
-                return new OperationResult<EnumItem>()
-                {
-                    Collection = roles,
-                    Status = OperationResultStatus.Success
-                };
+                return new OperationResult<EnumItem>(null, roles, OperationResultStatus.Success, null);
             }
 
             roles = await _accountEnumerationGrpcService.GetUserRoles(cancellationToken);
             if (roles == null)
             {
-                return new OperationResult<EnumItem>()
-                {
-                    Collection = roles,
-                    Status = OperationResultStatus.NotFound
-                };
+                return new OperationResult<EnumItem>(null, null, OperationResultStatus.NotFound, null);
             }
             if (roles != null)
             {
@@ -197,11 +144,7 @@ namespace OptiBid.Microservices.Services.Services
                         x.Set(key, roles.ToList(), cancellationToken));
             }
 
-            return new OperationResult<EnumItem>()
-            {
-                Collection = roles,
-                Status = OperationResultStatus.Success
-            };
+            return new OperationResult<EnumItem>(null, roles, OperationResultStatus.Success, null);
         }
 
         public async Task<OperationResult<EnumItem>> GetCountries(CancellationToken cancellationToken)
@@ -210,32 +153,20 @@ namespace OptiBid.Microservices.Services.Services
             IEnumerable<EnumItem> countries = await _hybridCache.GetCollection(key, cancellationToken);
             if (countries != null)
             {
-                return new OperationResult<EnumItem>()
-                {
-                    Collection = countries,
-                    Status = OperationResultStatus.Success
-                };
+                return new OperationResult<EnumItem>(null, countries, OperationResultStatus.Success, null);
             }
 
             countries = await _accountEnumerationGrpcService.GetCountries(cancellationToken);
             if (countries == null)
             {
-                return new OperationResult<EnumItem>()
-                {
-                    Collection = countries,
-                    Status = OperationResultStatus.NotFound
-                };
+                return new OperationResult<EnumItem>(null, null, OperationResultStatus.NotFound, null);
             }
             if (countries != null)
             {
                 _fireForgetHandler.Execute(x => x.Set(key, countries.ToList(), cancellationToken));
             }
 
-            return new OperationResult<EnumItem>()
-            {
-                Collection = countries,
-                Status = OperationResultStatus.Success
-            };
+            return new OperationResult<EnumItem>(null, countries, OperationResultStatus.Success, null);
         }
     }
 }

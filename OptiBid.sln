@@ -63,11 +63,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Microservices.Share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Console.Caching", "OptiBid.Console.Caching\OptiBid.Console.Caching.csproj", "{CD7AEFA9-AB38-4FB6-9261-A2EF35F8193F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Microservices.Services", "OptiBid.Microservices.Services\OptiBid.Microservices.Services.csproj", "{F39AAF2C-F087-43D5-8689-F2C86C9DD81F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Microservices.Infrastructure", "OptiBid.Microservices.Services\OptiBid.Microservices.Infrastructure.csproj", "{F39AAF2C-F087-43D5-8689-F2C86C9DD81F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Microservices.Contracts", "OptiBid.Microservices.Contracts\OptiBid.Microservices.Contracts.csproj", "{1DFC824B-D6EF-4E81-86FF-9CECC936451A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptiBid.Console.Otp-Net", "OptiBid.Console.Otp-Net\OptiBid.Console.Otp-Net.csproj", "{451FFD1E-D1AD-4BF9-B685-377C5CE7820E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OptiBid.Console.Otp-Net", "OptiBid.Console.Otp-Net\OptiBid.Console.Otp-Net.csproj", "{451FFD1E-D1AD-4BF9-B685-377C5CE7820E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
