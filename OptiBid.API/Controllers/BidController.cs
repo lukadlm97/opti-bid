@@ -1,23 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OptiBid.API.Utilities;
 using OptiBid.Microservices.Contracts.Domain.Input;
 using OptiBid.Microservices.Contracts.Domain.Output.Auction;
 using OptiBid.Microservices.Contracts.Services;
+using System.Security.Claims;
+using OptiBid.API.Utilities;
 
 namespace OptiBid.API.Controllers
-{
-    /// <summary>
+{  /// <summary>
     /// Controller which return auction related stuff
     /// </summary>  [Produces("application/json")]
     [Route("v1/[controller]")]
     [ApiController]
-    public class AuctionController : ControllerBase
+    public class BidController : ControllerBase
     {
-        private readonly IAuctionAssetService _auctionAssetService;
+        private readonly IBidService _bidService;
 
-        public AuctionController(IAuctionAssetService auctionAssetService)
+        public BidController(IBidService bidService)
         {
-            _auctionAssetService = auctionAssetService;
+            this._bidService = bidService;
         }
 
         /// <summary>
@@ -36,25 +36,26 @@ namespace OptiBid.API.Controllers
         /// <response code="404">Indicates that resources is not found</response>
         ///
         /// <returns></returns>
-        [ProducesResponseType(typeof(IEnumerable<Asset>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<BidDetailsReply>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet("assets")]
-        public async Task<ActionResult<IEnumerable<Asset>?>> GetAssets([FromQuery]PagingRequest pagingRequest, CancellationToken cancellationToken = default)
+        [HttpGet("{assetId}")]
+        public async Task<ActionResult<IEnumerable<BidDetailsReply>?>> GetAssets(int assetId, CancellationToken cancellationToken = default)
         {
-            return await _auctionAssetService.GetAssets(pagingRequest,cancellationToken)
+            return await _bidService.Get(assetId, cancellationToken)
                 .ToCollectionActionResult();
         }
 
+
         /// <summary>
-        /// Returns auction assets by id at system.
+        /// Returns auction assets by request at system.
         /// </summary>
         /// 
         /// <param name="cancellationToken"></param>
         /// <remarks>
         /// Sample request for fetching currently available auction assets
         ///
-        ///     GET /assets/{id}
+        ///     GET /assets
         ///     
         ///     
         /// </remarks>
@@ -62,14 +63,20 @@ namespace OptiBid.API.Controllers
         /// <response code="404">Indicates that resources is not found</response>
         ///
         /// <returns></returns>
-        [ProducesResponseType(typeof(Asset), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<BidDetailsReply>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet("assets/{id}")]
-        public async Task<ActionResult<Asset>> GetAsset(int id, CancellationToken cancellationToken = default)
+        [HttpPost("{assetId}")]
+        public async Task<ActionResult<BidReply>> Add(int assetId,[FromBody]BidRequest bidRequest, CancellationToken cancellationToken = default)
         {
-            return await _auctionAssetService.GetAssetById(id,cancellationToken)
-                .ToActionResult();
+            if (HttpContext.User.HasClaim(claim => claim.Type == ClaimTypes.Name))
+            {
+                var userName = HttpContext.User.FindFirst(ClaimTypes.Name)!.Value;
+                return await _bidService.Add(assetId, userName, bidRequest,cancellationToken)
+                    .ToActionResult();
+            }
+
+            return Unauthorized();
         }
     }
 }

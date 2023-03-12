@@ -237,3 +237,23 @@ Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/
 2023-03-12 00:53:35.672 +01:00 [INF] Executed action OptiBid.API.Controllers.AuctionController.GetAsset (OptiBid.API) in 2674.6879ms
 2023-03-12 00:53:35.675 +01:00 [INF] Executed endpoint 'OptiBid.API.Controllers.AuctionController.GetAsset (OptiBid.API)'
 2023-03-12 00:53:35.678 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5170/v1/Auction/assets/2 - - - 200 - application/json;+charset=utf-8 2700.2430ms
+2023-03-12 22:20:33.531 +01:00 [INF] User profile is available. Using 'C:\Users\luka.radovanovic\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-03-12 22:20:57.242 +01:00 [INF] User profile is available. Using 'C:\Users\luka.radovanovic\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-03-12 22:21:46.236 +01:00 [INF] User profile is available. Using 'C:\Users\luka.radovanovic\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2023-03-12 22:21:46.748 +01:00 [INF] Now listening on: http://localhost:5170
+2023-03-12 22:21:46.761 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-03-12 22:21:46.767 +01:00 [INF] Hosting environment: Development
+2023-03-12 22:21:46.770 +01:00 [INF] Content root path: C:\Users\luka.radovanovic\source\repos\opti-bid\OptiBid\OptiBid.API
+2023-03-12 22:21:53.040 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5170/swagger/index.html - -
+2023-03-12 22:21:53.041 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5170/swagger - -
+2023-03-12 22:21:53.663 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5170/swagger - - - 0 - - 618.6579ms
+2023-03-12 22:21:54.374 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5170/swagger/index.html - - - 200 - text/html;charset=utf-8 1344.0449ms
+2023-03-12 22:21:54.499 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5170/_vs/browserLink - -
+2023-03-12 22:21:54.513 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5170/_framework/aspnetcore-browser-refresh.js - -
+2023-03-12 22:21:54.726 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5170/_framework/aspnetcore-browser-refresh.js - - - 200 11992 application/javascript;+charset=utf-8 213.2601ms
+2023-03-12 22:21:54.890 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5170/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 391.1344ms
+2023-03-12 22:21:55.013 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5170/swagger/favicon-32x32.png - -
+2023-03-12 22:21:55.330 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5170/swagger/v1/swagger.json - -
+2023-03-12 22:21:55.331 +01:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2023-03-12 22:21:55.431 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5170/swagger/favicon-32x32.png - - - 0 628 image/png 417.3649ms
+2023-03-12 22:21:57.435 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5170/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 2104.9832ms

@@ -60,6 +60,7 @@ message AddAssetRequest{
      }	
      repeated string mediaUrl=9;
      int32 customerId=10;
+     int32 assetId=11;
 }
 
 message AddAssetReplay{

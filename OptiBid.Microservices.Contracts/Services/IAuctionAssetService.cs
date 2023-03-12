@@ -12,5 +12,11 @@ namespace OptiBid.Microservices.Contracts.Services
     {
         Task<OperationResult<Domain.Output.Auction.Asset>> GetAssets(PagingRequest pagingRequest,CancellationToken cancellationToken=default);
         Task<OperationResult<Domain.Output.Auction.Asset>> GetAssetById(int id, CancellationToken cancellationToken = default);
+
+        Task<OperationResult<Domain.Output.Auction.UpsertResult>> Insert(Domain.Input.UpsertAssetRequest assetRequest,
+            CancellationToken cancellationToken = default);
+        Task<OperationResult<Domain.Output.Auction.UpsertResult>> Update(int id,UpsertAssetRequest assetRequest,CancellationToken cancellationToken = default);
+        Task<OperationResult<Domain.Output.Auction.UpsertResult>> Delete(int id,  CancellationToken cancellationToken = default);
+
     }
 }

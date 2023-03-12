@@ -58,5 +58,44 @@ namespace OptiBid.Microservices.Infrastructure.Services
             return
                 new OperationResult<Asset>(asset, null, OperationResultStatus.Success, null);
         }
+
+        public async Task<OperationResult<UpsertResult>> Insert(UpsertAssetRequest assetRequest, CancellationToken cancellationToken = default)
+        {
+            var result = await _auctionGrpcService.Insert(assetRequest, cancellationToken);
+            if (result != null)
+            {
+                return new OperationResult<UpsertResult>(result, null, OperationResultStatus.Success, null);
+            }
+            return new OperationResult<UpsertResult>(result, null, OperationResultStatus.BadRequest, null);
+        }
+
+        public async Task<OperationResult<UpsertResult>> Update(int id, UpsertAssetRequest assetRequest, CancellationToken cancellationToken = default)
+        {
+
+            var key = nameof(Asset) + id;
+            _fireForget
+                .Execute(x =>
+                    x.Invalidate(key, cancellationToken));
+            var result = await _auctionGrpcService.Update(id,assetRequest, cancellationToken);
+            if (result != null)
+            {
+                return new OperationResult<UpsertResult>(result, null, OperationResultStatus.Success, null);
+            }
+            return new OperationResult<UpsertResult>(result, null, OperationResultStatus.BadRequest, null);
+        }
+
+        public async Task<OperationResult<UpsertResult>> Delete(int id, CancellationToken cancellationToken = default)
+        {
+            var key = nameof(Asset) + id;
+            _fireForget
+                .Execute(x =>
+                    x.Invalidate(key, cancellationToken));
+            var result = await _auctionGrpcService.Delete(id, cancellationToken);
+            if (result != null)
+            {
+                return new OperationResult<UpsertResult>(result, null, OperationResultStatus.Success, null);
+            }
+            return new OperationResult<UpsertResult>(result, null, OperationResultStatus.BadRequest, null);
+        }
     }
 }
