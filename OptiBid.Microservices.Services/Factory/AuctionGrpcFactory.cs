@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using OptiBid.Microservices.Auction.Grpc.AuctionAssetsServiceDefinition;
 using OptiBid.Microservices.Auction.Grpc.CategoriesServiceDefinition;
+using OptiBid.Microservices.Auction.Grpc.CustomersServiceDefinition;
 using OptiBid.Microservices.Contracts.Configuration;
 
 namespace OptiBid.Microservices.Services.Factory
@@ -11,6 +12,7 @@ namespace OptiBid.Microservices.Services.Factory
         private ExternalGrpcSettings _grpcSettings;
         private Category.CategoryClient _categoryClient;
         private AuctionAssets.AuctionAssetsClient _assetsClient;
+        private Customer.CustomerClient _customerClient;
         public  AuctionGrpcFactory(IOptions<ExternalGrpcSettings> grpcSettings)
         {
             _grpcSettings = grpcSettings.Value;
@@ -28,6 +30,21 @@ namespace OptiBid.Microservices.Services.Factory
             }
 
             return _categoryClient;
+        }
+
+        private void CreateCustomerClient()
+        {
+            _customerClient = new Customer.CustomerClient(GrpcChannel.ForAddress(_grpcSettings.AuctionServiceUrl));
+        }
+
+        public Customer.CustomerClient GetCustomerClient()
+        {
+            if (_customerClient == null)
+            {
+                CreateAuctionAssetsClient();
+            }
+
+            return _customerClient;
         }
         private void CreateAuctionAssetsClient()
         {

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OptiBid.Microservices.Auction.Grpc.AuctionAssetsServiceDefinition;
+﻿using OptiBid.Microservices.Auction.Grpc.AuctionAssetsServiceDefinition;
 using OptiBid.Microservices.Auction.Grpc.CategoriesServiceDefinition;
+using OptiBid.Microservices.Auction.Grpc.CustomersServiceDefinition;
 
 namespace OptiBid.Microservices.Services.Factory
 {
@@ -12,5 +8,6 @@ namespace OptiBid.Microservices.Services.Factory
     {
         Category.CategoryClient GetCategoryClient();
         AuctionAssets.AuctionAssetsClient GetAuctionAssetsClient();
+        Customer.CustomerClient GetCustomerClient();
     }
 }

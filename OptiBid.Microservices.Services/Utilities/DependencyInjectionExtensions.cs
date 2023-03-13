@@ -25,7 +25,9 @@ namespace OptiBid.Microservices.Services.Utilities
             serviceCollection.AddScoped(typeof(IAuctionGrpcFactory), typeof(AuctionGrpcFactory));
             serviceCollection.AddScoped<IAuctionAssetService, AuctionAssetService>();
             serviceCollection.AddScoped<IBidService, BidService>();
+            serviceCollection.AddScoped<ICustomerService, CustomerService>();
             serviceCollection.AddScoped<IAuctionAssetsGrpcService, AuctionAssetsGrpcService>();
+            serviceCollection.AddScoped<ICustomerGrpcService, CustomerGrpcService>();
 
             serviceCollection.AddScoped(typeof(IFireForget<>), typeof(FireForget<>));
         }
